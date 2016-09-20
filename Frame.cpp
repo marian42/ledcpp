@@ -12,7 +12,7 @@ private:
 				this->x = x;
 			}
 			
-		Color operator[] (unsigned int y) {
+		Color& operator[] (unsigned int y) {
 			return *this->frame->get(this->x, y);
 		}
 	};

@@ -6,6 +6,9 @@
 #define GPIO_PIN		18
 #define DMA				5
 
+#include <iostream>
+using namespace std;
+
 class Screen {
 private:
 	ws2811_t ledString;
@@ -16,7 +19,7 @@ private:
 			nullptr,
 			TARGET_FREQ,
 			DMA, {
-				{ GPIO_PIN, 0, Frame::WIDTH, Frame::HEIGHT, 255 },
+				{ GPIO_PIN, 0, Frame::WIDTH * Frame::HEIGHT, 255 },
 				{ 0 }
 			}
 		};

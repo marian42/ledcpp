@@ -31,6 +31,6 @@ public:
 	}
 	
 	unsigned int toInt() {
-		return r << 16 + g << 8 + b;
+		return (r << 16) + (g << 8) + b;
 	}
 };
