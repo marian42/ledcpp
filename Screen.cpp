@@ -2,10 +2,10 @@
 
 class Screen {
 public:
-	Frame* frame;
+	Frame frame;
 	
 	Screen() {
-		this->frame = new Frame;
+		this->frame = Frame();
 	}
 	
 	void update() {
