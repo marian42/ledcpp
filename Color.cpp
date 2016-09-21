@@ -33,4 +33,45 @@ public:
 	unsigned int toInt() {
 		return (r << 16) + (g << 8) + b;
 	}
+	
+	void hsv(char hue, char saturation, char value) {
+		unsigned char region, remainder, p, q, t;
+
+		if (saturation == 0) {
+			this->set(value);
+			return;
+		}
+
+		region = hue / 43;
+		remainder = (hue - (region * 43)) * 6; 
+
+		p = (value * (255 - saturation)) >> 8;
+		q = (value * (255 - ((saturation * remainder) >> 8))) >> 8;
+		t = (value * (255 - ((saturation * (255 - remainder)) >> 8))) >> 8;
+
+		switch (region) {
+			case 0:
+				r = value; g = t; b = p;
+				break;
+			case 1:
+				r = q; g = value; b = p;
+				break;
+			case 2:
+				r = p; g = value; b = t;
+				break;
+			case 3:
+				r = p; g = q; b = value;
+				break;
+			case 4:
+				r = t; g = p; b = value;
+				break;
+			default:
+				r = value; g = p; b = q;
+				break;
+		}
+	}
+	
+	void hue(int hue) {
+		hsv(hue, 255, 255);
+	}
 };

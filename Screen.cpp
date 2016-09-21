@@ -37,7 +37,8 @@ public:
 	void update() {
 		for (int x = 0; x < Frame::WIDTH; x++) {
 			for (int y = 0; y < Frame::HEIGHT; y++) {
-				this->ledString.channel[0].leds[y * Frame::HEIGHT + x] = this->frame[x][y].toInt();
+				int address = y * Frame::HEIGHT + (y % 2 == 0 ? x : Frame::WIDTH - 1 - x);				
+				this->ledString.channel[0].leds[address] = this->frame[x][y].toInt();
 			}
 		}
 		ws2811_render(&ledString);
