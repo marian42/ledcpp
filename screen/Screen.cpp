@@ -32,9 +32,9 @@ private:
 	}
 	
 	int colorToInt(Color* color) {
-		return    (processColor(color->r) << 16)
-				+ (processColor(color->g) << 8)
-				+ (processColor(color->b));
+		return    (processColor(color->r) << 8)
+				+ (processColor(color->g) << 16)
+				+ (processColor(color->b) << 0);
 	}
 	
 public:
