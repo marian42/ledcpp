@@ -4,3 +4,6 @@
 [submodule "screen/rpi_ws281x"]
 	path = screen/rpi_ws281x
 	url = https://github.com/jgarff/rpi_ws281x
+[submodule "cpp/screen/rpi_ws281x"]
+	path = cpp/screen/rpi_ws281x
+	url = https://github.com/jgarff/rpi_ws281x
