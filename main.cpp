@@ -27,7 +27,7 @@ int main( int argc, const char* argv[]) {
 				screen->frame[x][y].hsv(
 					int(t * 0.02 + radius * 0.5) % 255,
 					255,
-					char(255.0 * pow(sin(radius / stretch - t * 0.003), 4.0)));
+					char(255.0 * (0.5 + 0.5 * sin(2.0 * radius / stretch - t * 0.006))));
 			}
 		}
 		screen->update();

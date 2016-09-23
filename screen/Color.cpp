@@ -1,4 +1,5 @@
 class Color {
+	
 public:
 	unsigned char r;
 	unsigned char g;

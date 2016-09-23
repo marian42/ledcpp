@@ -1,5 +1,6 @@
 #include "Frame.cpp"
 #include <cstdint>
+#include <math.h>
 #include "rpi_ws281x/ws2811.h"
 
 #define TARGET_FREQ		WS2811_TARGET_FREQ
@@ -25,11 +26,25 @@ private:
 		};
 		ws2811_init(&ledString);
 	}
+
+	unsigned char processColor(unsigned char value) {
+		return (int)(255.0 * pow(value / 255.0 * brightness, gamma));
+	}
+	
+	int colorToInt(Color* color) {
+		return    (processColor(color->r) << 16)
+				+ (processColor(color->g) << 8)
+				+ (processColor(color->b));
+	}
 	
 public:
 	Frame frame;
+	float brightness;
+	float gamma;
 	
 	Screen() {
+		this->brightness = 1.0;
+		this->gamma = 2.0;
 		this->frame = Frame();
 		this->initializeLEDString();
 	}
@@ -37,8 +52,8 @@ public:
 	void update() {
 		for (int x = 0; x < Frame::WIDTH; x++) {
 			for (int y = 0; y < Frame::HEIGHT; y++) {
-				int address = y * Frame::HEIGHT + (y % 2 == 0 ? x : Frame::WIDTH - 1 - x);				
-				this->ledString.channel[0].leds[address] = this->frame[x][y].toInt();
+				int address = y * Frame::HEIGHT + (y % 2 == 0 ? x : Frame::WIDTH - 1 - x);
+				this->ledString.channel[0].leds[address] = colorToInt(&(this->frame[x][y]));
 			}
 		}
 		ws2811_render(&ledString);
