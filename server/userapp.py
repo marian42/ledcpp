@@ -44,3 +44,8 @@ class UserApp:
 				sourceFile = SourceFile(self.get_directory(), file)
 				sourceFile.load()
 				self.files.append(sourceFile)
+	
+	def get_main_file(self):
+		for sourcefile in self.files:
+			if sourcefile.name == self.shortname + ".cpp":
+				return sourcefile

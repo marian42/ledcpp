@@ -16,3 +16,6 @@ class SourceFile:
 		if (os.path.isfile(self.directory + self.filename)):
 			with open(self.directory + self.filename, 'r') as file:
 				self.content = file.read()
+				
+	def get_file_name(self):
+		return self.directory + self.filename
