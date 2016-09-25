@@ -19,14 +19,14 @@ def compile(userapp):
 	command = [
 		"gcc",
 		"-fPIC",
-		userapp.get_directory() + "apprunner.cpp",
+		userapp.get_directory() + "appInterface.cpp",
 		"-std=c++11",
 		"-lstdc++",
 		"-shared",
 		"-L", "cpp/screen/rpi_ws281x/",
 		"-lws2811",
 		"-lm",
-		"-o", userapp.get_directory() + "apprunner.so"]
+		"-o", userapp.get_directory() + "appInterface.so"]
 	shell = subprocess.Popen(
 		command,
 		stderr = subprocess.PIPE,
@@ -44,7 +44,7 @@ def compile(userapp):
 		return False
 		
 def run(userapp):
-	interface = ctypes.CDLL(userapp.get_directory() + "apprunner.so")
+	interface = ctypes.CDLL(userapp.get_directory() + "appInterface.so")
 	interface.start()
 	for i in range(10):
 		time.sleep(1)
