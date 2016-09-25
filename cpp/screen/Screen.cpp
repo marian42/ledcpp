@@ -45,7 +45,6 @@ public:
 	Screen() {
 		this->brightness = 1.0;
 		this->gamma = 2.0;
-		this->frame = Frame();
 		this->initializeLEDString();
 	}
 	

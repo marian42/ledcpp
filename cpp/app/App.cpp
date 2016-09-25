@@ -38,7 +38,6 @@ protected:
 
 public:
 	App() {
-		this->screen = Screen();
 		this->lastUpdate = getTime();
 		this->lastFPSPrint = this->lastUpdate;
 	}

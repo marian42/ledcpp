@@ -36,17 +36,13 @@ public:
 		
 		this->columns = new FrameColumn*[this->WIDTH];		
 		for (int x = 0; x < this->WIDTH; x++) {
-			this->columns[x] = 0;
+			this->columns[x] = new FrameColumn(this, x);
 		}
 		
 		this->initialize();
 	}
 	
 	FrameColumn operator[] (unsigned int x) {
-		if (this->columns[x] == 0) {
-			this->columns[x] = new FrameColumn(this, x);
-		}
-		
 		return *this->columns[x];
 	}
 	
