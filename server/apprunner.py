@@ -46,7 +46,9 @@ def compile(userapp):
 def run(userapp):
 	interface = ctypes.CDLL(userapp.get_directory() + "apprunner.so")
 	interface.start()
-	time.sleep(10)
+	for i in range(10):
+		time.sleep(1)
+		print interface.getFPS()
 	interface.stop()
 	
 	print "complete"

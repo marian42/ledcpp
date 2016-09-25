@@ -3,8 +3,10 @@
 
 class App {
 private:
+	static const int FPS_AVERAGE_COUNT = 10;
+	
+	int lastDeltaT[FPS_AVERAGE_COUNT];
 	long lastUpdate;
-	long lastFPSPrint;
 	
 	static long getTime() {
 		auto time = std::chrono::system_clock::now();
@@ -16,13 +18,8 @@ private:
 	void updateTime() {
 		this->time = getTime();
 		this->deltaT = this->time - this->lastUpdate;
+		this->lastDeltaT[this->frameCount % this->FPS_AVERAGE_COUNT] = this->deltaT;
 		this->lastUpdate = this->time;
-		
-		if (this->time - this->lastFPSPrint > 1000) {
-			float fps = 1000.0 / (float)(this->deltaT);
-			cout << fps << endl;
-			this->lastFPSPrint = this->time;			
-		}
 	}
 
 protected:
@@ -30,19 +27,37 @@ protected:
 	
 	long time;
 	long deltaT;
+	long frameCount;
 	
 	void update() {
-		this->screen.update();			
+		this->screen.update();
 		this->updateTime();
+		this->frameCount++;
 	}
 
 public:
 	App() {
+		this->frameCount = 0;
 		this->lastUpdate = getTime();
-		this->lastFPSPrint = this->lastUpdate;
 	}
 
 	virtual void run() = 0;
 	
 	virtual void stop() = 0;
+	
+	long getDeltaT() {
+		return this->deltaT;
+	}
+	
+	int getFPS() {
+		int deltaTSum = 0;
+		for (int i = 0; i < this->FPS_AVERAGE_COUNT; i++) {
+			deltaTSum += this->frameCount > i ? this->lastDeltaT[i] : 0;
+		}
+		if (this->frameCount < this->FPS_AVERAGE_COUNT) {
+			return 1000 * this->frameCount / deltaTSum;
+		} else {
+			return 1000 * this->FPS_AVERAGE_COUNT / deltaTSum;
+		}
+	}
 };
