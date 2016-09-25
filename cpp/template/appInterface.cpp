@@ -8,7 +8,10 @@
 thread* appThread = 0;
 
 void runAppTask() {
-	app->run();
+	try {
+		app->run();
+	}
+	catch(InterruptException exception) { }
 }
 
 extern "C" void start() {

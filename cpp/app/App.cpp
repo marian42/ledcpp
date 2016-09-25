@@ -1,12 +1,16 @@
 #include "../screen/Screen.cpp"
 #include <chrono>
 
+class InterruptException: public std::exception { };
+
 class App {
 private:
 	static const int FPS_AVERAGE_COUNT = 10;
 	
 	int lastDeltaT[FPS_AVERAGE_COUNT];
 	long lastUpdate;
+	
+	bool stopped;
 	
 	static long getTime() {
 		auto time = std::chrono::system_clock::now();
@@ -33,17 +37,24 @@ protected:
 		this->screen.update();
 		this->updateTime();
 		this->frameCount++;
+		
+		if (this->stopped) {
+			throw InterruptException();
+		}
 	}
 
 public:
 	App() {
 		this->frameCount = 0;
 		this->lastUpdate = getTime();
+		this->stopped = false;
 	}
 
 	virtual void run() = 0;
 	
-	virtual void stop() = 0;
+	void stop() {
+		this->stopped = true;
+	}
 	
 	long getDeltaT() {
 		return this->deltaT;
