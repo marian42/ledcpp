@@ -34,6 +34,7 @@ class UserApp:
 		if (not "App" in config):
 			config["App"] = {}
 		config["App"]["name"] = self.name
+		config["App"]["compiled_successfully"] = self.compiled_successfully
 		
 		with open(self.get_config_filename(), "w") as configfile:
 			config.write(configfile)
@@ -42,6 +43,7 @@ class UserApp:
 		config = configparser.ConfigParser()
 		config.read(self.get_config_filename())
 		self.name = config["App"]["name"]
+		self.compiled_successfully = config["App"]["compiled_successfully"]
 		
 		files = [file for file in os.listdir(self.get_directory()) if os.path.isfile(os.path.join(self.get_directory(), file))]
 		
