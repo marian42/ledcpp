@@ -34,7 +34,7 @@ class UserApp:
 		if (not "App" in config):
 			config["App"] = {}
 		config["App"]["name"] = self.name
-		config["App"]["compiled_successfully"] = self.compiled_successfully
+		config["App"]["compiled_successfully"] = "true" if self.compiled_successfully else "false"
 		
 		with open(self.get_config_filename(), "w") as configfile:
 			config.write(configfile)
@@ -42,8 +42,14 @@ class UserApp:
 	def load(self):
 		config = configparser.ConfigParser()
 		config.read(self.get_config_filename())
+		config["DEFAULT"] = {
+			"name" : "",
+			"compiled_successfully" : "false"
+		}		
+		if (not "App" in config):
+			config["App"] = {}
 		self.name = config["App"]["name"]
-		self.compiled_successfully = config["App"]["compiled_successfully"]
+		self.compiled_successfully = config["App"]["compiled_successfully"] == "true"
 		
 		files = [file for file in os.listdir(self.get_directory()) if os.path.isfile(os.path.join(self.get_directory(), file))]
 		
