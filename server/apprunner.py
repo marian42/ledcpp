@@ -2,6 +2,7 @@ from userapp import UserApp
 import subprocess
 import os
 import ctypes
+import time
 
 state = "Ready"
 compile_output = ""
@@ -45,4 +46,7 @@ def compile(userapp):
 def run(userapp):
 	interface = ctypes.CDLL(userapp.get_directory() + "apprunner.so")
 	interface.start()
+	time.sleep(10)
+	interface.stop()
+	
 	print "complete"

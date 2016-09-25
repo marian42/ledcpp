@@ -4,6 +4,7 @@ import apprunner
 app = UserApp("TestApp")
 app.load()
 
-apprunner.compile(app)
-print apprunner.compile_output
-apprunner.run(app)
+if not apprunner.compile(app):
+	print apprunner.compile_output
+else:
+	apprunner.run(app)
