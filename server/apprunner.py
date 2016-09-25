@@ -1,7 +1,5 @@
 from userapp import UserApp
-import subprocess
 import os
-import ctypes
 import time
 
 state = "Ready"
@@ -16,35 +14,17 @@ def compile(userapp):
 	global compile_output
 	
 	update_state("Compiling " + userapp.shortname + "...")
-	command = [
-		"gcc",
-		"-fPIC",
-		userapp.get_directory() + "appInterface.cpp",
-		"-std=c++11",
-		"-lstdc++",
-		"-shared",
-		"-L", "cpp/screen/rpi_ws281x/",
-		"-lws2811",
-		"-lm",
-		"-o", userapp.get_directory() + "appInterface.so"]
-	shell = subprocess.Popen(
-		command,
-		stderr = subprocess.PIPE,
-		stdout = subprocess.PIPE)
-	print " ".join(command)
 	
-	comm = shell.communicate()
-	compile_output = comm[1] if len(comm[1]) != 0 else comm[0]
+	compile_output = userapp.compile()
 	
-	if (shell.returncode == 0):
+	if userapp.compiled_successfully:
 		update_state("Compiled " + userapp.shortname + " successfully.")
-		return True
 	else:
 		update_state("Errors while compiling " + userapp.shortname + ".")
-		return False
+	return userapp.compiled_successfully
 		
 def run(userapp):
-	interface = ctypes.CDLL(userapp.get_directory() + "appInterface.so")
+	interface = userapp.load_app_interface()
 	interface.start()
 	for i in range(10):
 		time.sleep(1)

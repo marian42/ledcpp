@@ -1,6 +1,8 @@
 from sourcefile import SourceFile
 import configparser
 import os
+import ctypes
+import subprocess
 
 USERAPPS_DIRECTORY = "cpp/userapps/"
 APP_INTERFACE_FILENAME = "appInterface.cpp"
@@ -10,6 +12,7 @@ class UserApp:
 	def __init__(self, shortname):
 		self.shortname = shortname
 		self.files = []
+		self.compiled_successfully = False
 	
 	def get_directory(self):
 		return USERAPPS_DIRECTORY + self.shortname + "/"
@@ -61,3 +64,29 @@ class UserApp:
 		for sourcefile in self.files:
 			if sourcefile.name == self.shortname + ".cpp":
 				return sourcefile
+				
+	def compile(self):	
+		command = [
+			"gcc",
+			"-fPIC",
+			self.get_directory() + APP_INTERFACE_FILENAME,
+			"-std=c++11",
+			"-lstdc++",
+			"-shared",
+			"-L", "cpp/screen/rpi_ws281x/",
+			"-lws2811",
+			"-lm",
+			"-o", self.get_directory() + "appInterface.so"]
+		print " ".join(command)
+		shell = subprocess.Popen(
+			command,
+			stderr = subprocess.PIPE,
+			stdout = subprocess.PIPE)		
+		comm = shell.communicate()
+		
+		self.compiled_successfully = shell.returncode == 0
+		
+		return comm[1] if len(comm[1]) != 0 else comm[0]
+				
+	def load_app_interface(self):
+		return ctypes.CDLL(self.get_directory() + "appInterface.so")
