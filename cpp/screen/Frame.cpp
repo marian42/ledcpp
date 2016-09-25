@@ -33,7 +33,12 @@ public:
 	
 	Frame() {
 		this->pixel = new Color*[this->WIDTH * this->HEIGHT];
-		this->columns = new FrameColumn*[this->WIDTH];
+		
+		this->columns = new FrameColumn*[this->WIDTH];		
+		for (int x = 0; x < this->WIDTH; x++) {
+			this->columns[x] = 0;
+		}
+		
 		this->initialize();
 	}
 	
