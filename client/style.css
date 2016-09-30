@@ -30,19 +30,23 @@ body, html, .container-fluid, .sidebar, .body {
 .appitem {
     width: 100%;
     overflow: auto;
-    color: #F2F5D2;
+    color: #9DA087;
     -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
+}
 
+.selected {
+	background-color:#3B3C35;
+	color:#F2F5D2;
 }
 
 .appitem:hover {
-    background-color: #3B3C35;
+    background-color: #2D2E28;
 }
 
-.appitem:selected {
-    background-color: #6B6C5D;
+.selected:hover{
+	background-color:#3B3C35;
 }
 
 .appscreen {

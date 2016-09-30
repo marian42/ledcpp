@@ -1,4 +1,5 @@
-apps = {};
+var apps = {};
+var selectedApp = null;
 
 var codeEditor = CodeMirror(document.getElementById("codewrapper"), {
   value: "",
@@ -6,6 +7,17 @@ var codeEditor = CodeMirror(document.getElementById("codewrapper"), {
   theme: "base16-dark",
   lineNumbers: true
 });
+
+function selectApp(app) {
+	if (selectedApp != null) {
+		selectedApp.files[0].content = codeEditor.getValue();
+		$(selectedApp.domElement).removeClass("selected");
+	}
+	
+	codeEditor.setValue(app.files[0].content);
+	$(app.domElement).addClass("selected");
+	selectedApp = app;
+}
 
 function createAppItem(app) {
 	var sidebar = $(".sidebar")[0];
@@ -28,6 +40,12 @@ function createAppItem(app) {
 	item.appendChild(shortname);	
 	
 	sidebar.appendChild(item);
+	
+	$(item).click(function() {
+		selectApp(app);
+	})
+	
+	return item;
 }
 
 function updateApps() {
@@ -38,6 +56,10 @@ function updateApps() {
 					apps[data[i].shortname] = data[i];					
 					apps[data[i].shortname].domElement = createAppItem(data[i]);
 				}
+			}
+			
+			if (selectedApp == null && Object.keys(apps).length != 0) {
+				selectApp(apps[Object.keys(apps)[0]]);
 			}
 		}
 	});
