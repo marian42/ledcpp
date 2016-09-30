@@ -8,10 +8,20 @@ var codeEditor = CodeMirror(document.getElementById("codewrapper"), {
   lineNumbers: true
 });
 
+codeEditor.on("changes", function() {
+	if (selectedApp == null) {
+		return;
+	}
+	selectedApp.modified = true;
+	$(selectedApp.domElement).addClass("modified");
+});
+
 function selectApp(app) {
 	if (selectedApp != null) {
-		selectedApp.files[0].content = codeEditor.getValue();
-		$(selectedApp.domElement).removeClass("selected");
+		oldApp = selectedApp;
+		selectedApp = null;
+		oldApp.files[0].content = codeEditor.getValue();
+		$(oldApp.domElement).removeClass("selected");
 	}
 	
 	codeEditor.setValue(app.files[0].content);
@@ -53,8 +63,9 @@ function updateApps() {
 		success: function(data) {
 			for (var i = 0; i < data.length; i++) {
 				if (apps[data[i].shortname] == null) {
-					apps[data[i].shortname] = data[i];					
+					apps[data[i].shortname] = data[i];			
 					apps[data[i].shortname].domElement = createAppItem(data[i]);
+					apps[data[i].shortname].modified = false;
 				}
 			}
 			
