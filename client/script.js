@@ -76,5 +76,20 @@ function updateApps() {
 	});
 }
 
+function saveFile() {
+	$.ajax("save/" + selectedApp.shortname + "/" + selectedApp.files[0].filename, {
+		method: "POST",
+		processData: false,
+		data: codeEditor.getValue(),
+		contentType: 'text/plain',
+		success: function(data) {
+			selectedApp.modified = false;
+			$(selectedApp.domElement).removeClass("modified");
+		}
+	});
+}
+
+$('#btnUpload').click(saveFile);
+
 codeEditor.setSize("100%", "100%");
 updateApps();

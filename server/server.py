@@ -1,4 +1,4 @@
-import flask
+from flask import *
 import thread
 import logging
 import time
@@ -6,7 +6,7 @@ import apps
 import json
 
 app_list = apps.load_apps()
-server = flask.Flask(__name__, static_folder='../client/', static_url_path='')
+server = Flask(__name__, static_folder='../client/', static_url_path='')
 #log = logging.getLogger('werkzeug')
 #log.setLevel(logging.ERROR)
 
@@ -16,10 +16,18 @@ def index():
 
 @server.route("/apps", methods=['GET'])
 def get_apps():
-	return flask.Response(json.dumps([app.get_serializable() for app in app_list.values()]), mimetype='application/json')
+	return Response(json.dumps([app.get_serializable() for app in app_list.values()]), mimetype='application/json')
 
-@server.route("/update", methods=['GET'])
-def update(app, code):
+@server.route("/save/<app>/<filename>", methods=['POST'])
+def update(app, filename):
+	if not app in app_list.keys():
+		return 404, "App not found"
+	selectedApp = app_list[app]
+	file = selectedApp.get_file(filename)
+	if file == None:
+		return 404, "File not found"
+	file.content = request.data
+	file.save()
 	return "ok"
 	
 @server.route("/screen/<app>", methods=['GET'])

@@ -51,7 +51,6 @@ class UserApp:
 			config["App"] = {}
 		self.name = config["App"]["name"]
 		self.compiled_successfully = config["App"]["compiled_successfully"] == "true"
-		print "name:" + self.name
 		
 		files = [file for file in os.listdir(self.get_directory()) if os.path.isfile(os.path.join(self.get_directory(), file))]
 		
@@ -70,10 +69,13 @@ class UserApp:
 		text_file.write(cpp_template)
 		text_file.close()
 	
-	def get_main_file(self):
+	def get_file(self, filename):
 		for sourcefile in self.files:
-			if sourcefile.name == self.shortname + ".cpp":
+			if sourcefile.filename == filename:
 				return sourcefile
+	
+	def get_main_file(self):
+		return self.get_file(self.shortname + ".cpp")
 				
 	def compile(self):	
 		command = [
