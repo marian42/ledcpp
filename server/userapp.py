@@ -3,6 +3,7 @@ import configparser
 import os
 import ctypes
 import subprocess
+import json
 
 USERAPPS_DIRECTORY = "cpp/userapps/"
 APP_INTERFACE_FILENAME = "appInterface.cpp"
@@ -45,11 +46,12 @@ class UserApp:
 		config["DEFAULT"] = {
 			"name" : "",
 			"compiled_successfully" : "false"
-		}		
+		}
 		if (not "App" in config):
 			config["App"] = {}
 		self.name = config["App"]["name"]
 		self.compiled_successfully = config["App"]["compiled_successfully"] == "true"
+		print "name:" + self.name
 		
 		files = [file for file in os.listdir(self.get_directory()) if os.path.isfile(os.path.join(self.get_directory(), file))]
 		
@@ -98,3 +100,10 @@ class UserApp:
 				
 	def load_app_interface(self):
 		return ctypes.CDLL(self.get_directory() + "appInterface.so")
+		
+	def get_serializable(self):
+		return {
+			"name": self.name,
+			"shortname": self.shortname,
+			"files": [file.get_serializable() for file in self.files]
+		}

@@ -19,3 +19,9 @@ class SourceFile:
 				
 	def get_file_name(self):
 		return self.directory + self.filename
+		
+	def get_serializable(self):
+		return {
+			"filename": self.filename,
+			"content": self.content
+		}
