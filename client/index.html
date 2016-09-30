@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>LED Matrix</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/bootstrap-theme.css" rel="stylesheet">
+	<link href="style.css" rel="stylesheet">
+	<link rel="stylesheet" href="codemirror/codemirror.css">
+	<link rel="stylesheet" href="codemirror/base16-dark.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+	<nav class="navbar navbar-default" style="margin-bottom:0px; border-radius:0px;">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <a class="navbar-brand" href="#">LED Matrix</a>
+		</div>
+
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav">
+			<li><a href="#" title="Upload, Compile, Run"><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a></li>
+			<li><a href="#" title="Upload, Compile"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></a></li>
+			<li><a href="#" title="Upload"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span></a></li>
+		  
+			<li><a href="#">60 FPS</a></li>
+			<li><a href="#">Ready</a></li>
+		  </ul>
+		  <ul class="nav navbar-nav navbar-right">
+			<li><a href="#">Login</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+	
+	
+    
+    <div class="content-wrapper">
+		<div class="sidebar">
+			<!--<div class="appitem">
+				<img class="appscreen" src="screen.png">
+				<div class="apptitle">My Example App</div>
+				<div class="appshortname">Example.cpp</div>
+			</div>-->
+		</div>
+	</div>
+	<div class="main-content">
+		<div id="codewrapper" class="editor"></div>
+	</div>
+	
+</body>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+    <script src="codemirror/codemirror.js"></script>
+    <script src="codemirror/clike.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
