@@ -28,11 +28,13 @@ def run(userapp):
 	global interface
 	stop()
 	interface = userapp.load_app_interface()
+	print "Starting App"
 	interface.start()
 	
 def stop():
 	global interface
 	if interface == None:
 		return
+	print "Stopping."
 	interface.stop()
 	interface = None

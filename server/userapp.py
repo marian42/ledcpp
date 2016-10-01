@@ -4,10 +4,13 @@ import os
 import ctypes
 import subprocess
 import json
+from shutil import copyfile
 
 USERAPPS_DIRECTORY = "cpp/userapps/"
 APP_INTERFACE_FILENAME = "appInterface.cpp"
 APP_INTERFACE_DIRECTORY = "cpp/template/"
+
+dll_counter = 0
 
 class UserApp:
 	def __init__(self, shortname):
@@ -104,7 +107,20 @@ class UserApp:
 		return comm[1] if len(comm[1]) != 0 else comm[0]
 				
 	def load_app_interface(self):
-		return ctypes.CDLL(self.get_directory() + "appInterface.so")
+		print "Copying DLL"
+		global dll_counter
+		filename = self.get_directory() + "bin/" + str(dll_counter) + ".so"
+		
+		if not os.path.exists(self.get_directory() + "bin/"):
+			os.makedirs(self.get_directory() + "bin/")
+		
+		copyfile(self.get_directory() + "appInterface.so", filename)
+		dll_counter += 1
+		
+		print "Loading DLL"
+		result = ctypes.CDLL(filename)
+		print "Loaded DLL."
+		return ctypes.CDLL(filename)
 		
 	def get_serializable(self):
 		return {
