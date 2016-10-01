@@ -76,20 +76,59 @@ function updateApps() {
 	});
 }
 
-function saveFile() {
+function handleButtonIntent(intent) {
+	if (intent == "compile") {
+		$('#status').html("Compiling " + selectedApp.shortname + ".cpp...");	
+		$.ajax("compile/" + selectedApp.shortname, {
+			method: "POST",
+			success: function(data) {
+				$('#status').html("Compiled successfully.");		
+			},
+			error: function(data) {
+				$('#status').html("Compilation failed.");
+			}
+		});
+	}
+	
+	if (intent == "run") {
+		$('#status').html("Compiling and Running " + selectedApp.shortname + ".cpp...");	
+		$.ajax("run/" + selectedApp.shortname, {
+			method: "POST",
+			success: function(data) {
+				$('#status').html("Running " + selectedApp.shortname + ".");		
+			},
+			error: function(data) {
+				$('#status').html("Compilation failed.");		
+			}
+		});
+	}
+}
+
+function saveFile(intent) {
+	if (!selectedApp.modified && intent != "update") {
+		handleButtonIntent(intent);
+		return;
+	}
+	
+	$('#status').html("Uploading " + selectedApp.shortname + ".cpp...");
 	$.ajax("save/" + selectedApp.shortname + "/" + selectedApp.files[0].filename, {
 		method: "POST",
 		processData: false,
 		data: codeEditor.getValue(),
 		contentType: 'text/plain',
 		success: function(data) {
+			$('#status').html("Uploaded " + selectedApp.shortname + ".cpp.");
 			selectedApp.modified = false;
 			$(selectedApp.domElement).removeClass("modified");
+			
+			handleButtonIntent(intent);
 		}
 	});
 }
 
-$('#btnUpload').click(saveFile);
+$('#btnUpload').click(function() {saveFile("update")});
+$('#btnCompile').click(function() {saveFile("compile")});
+$('#btnRun').click(function() {saveFile("run")});
 
 codeEditor.setSize("100%", "100%");
 updateApps();

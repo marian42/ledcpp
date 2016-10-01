@@ -32,6 +32,7 @@ class UserApp:
 	
 	def save(self):
 		config = configparser.ConfigParser()
+		config.read(self.get_config_filename())
 		if (not "App" in config):
 			config["App"] = {}
 		config["App"]["name"] = self.name
@@ -93,10 +94,12 @@ class UserApp:
 		shell = subprocess.Popen(
 			command,
 			stderr = subprocess.PIPE,
-			stdout = subprocess.PIPE)		
+			stdout = subprocess.PIPE)
 		comm = shell.communicate()
 		
 		self.compiled_successfully = shell.returncode == 0
+		if (self.compiled_successfully):
+			self.save()
 		
 		return comm[1] if len(comm[1]) != 0 else comm[0]
 				

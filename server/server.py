@@ -4,6 +4,7 @@ import logging
 import time
 import apps
 import json
+import apprunner
 
 app_list = apps.load_apps()
 server = Flask(__name__, static_folder='../client/', static_url_path='')
@@ -18,16 +19,47 @@ def index():
 def get_apps():
 	return Response(json.dumps([app.get_serializable() for app in app_list.values()]), mimetype='application/json')
 
-@server.route("/save/<app>/<filename>", methods=['POST'])
-def update(app, filename):
-	if not app in app_list.keys():
-		return 404, "App not found"
-	selectedApp = app_list[app]
+@server.route("/save/<app_name>/<filename>", methods=['POST'])
+def update(app_name, filename):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
 	file = selectedApp.get_file(filename)
 	if file == None:
-		return 404, "File not found"
+		return "File not found", 404
 	file.content = request.data
 	file.save()
+	selectedApp.compiled_successfully = False
+	return "ok"
+	
+@server.route("/compile/<app_name>", methods=['POST'])
+def compile(app_name):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
+	
+	apprunner.stop()
+	
+	if not apprunner.compile(selectedApp):
+		print apprunner.compile_output
+		return apprunner.compile_output, 400
+	else:
+		return "ok"
+		
+@server.route("/run/<app_name>", methods=['POST'])
+def run(app_name):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
+	
+	if not selectedApp.compiled_successfully:
+		apprunner.stop()
+		if not apprunner.compile(selectedApp):
+			print apprunner.compile_output
+			return apprunner.compile_output, 400
+	apprunner.stop()
+	time.sleep(1.0)
+	apprunner.run(selectedApp)
 	return "ok"
 	
 @server.route("/screen/<app>", methods=['GET'])

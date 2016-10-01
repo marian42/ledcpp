@@ -4,6 +4,7 @@ import time
 
 state = "Ready"
 compile_output = ""
+interface = None
 
 def update_state(value):
 	global state
@@ -24,11 +25,14 @@ def compile(userapp):
 	return userapp.compiled_successfully
 		
 def run(userapp):
+	global interface
+	stop()
 	interface = userapp.load_app_interface()
 	interface.start()
-	for i in range(10):
-		time.sleep(1)
-		print interface.getFPS()
-	interface.stop()
 	
-	print "complete"
+def stop():
+	global interface
+	if interface == None:
+		return
+	interface.stop()
+	interface = None
