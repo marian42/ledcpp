@@ -98,7 +98,7 @@ function handleButtonIntent(intent) {
 				$('#status').html("Running " + selectedApp.shortname + ".");		
 			},
 			error: function(data) {
-				$('#status').html("Compilation failed.");		
+				$('#status').html("Compilation failed.");
 			}
 		});
 	}
@@ -122,6 +122,9 @@ function saveFile(intent) {
 			$(selectedApp.domElement).removeClass("modified");
 			
 			handleButtonIntent(intent);
+		},
+		error: function() {
+			$('#status').html("Uploading failed.");
 		}
 	});
 }
