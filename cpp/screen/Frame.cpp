@@ -42,6 +42,17 @@ public:
 		this->initialize();
 	}
 	
+	~Frame() {
+		for (int i = 0; i < this->WIDTH * this->HEIGHT; i++) {
+			delete this->pixel[i];
+		}
+		delete this->pixel;
+		for (int x = 0; x < this->WIDTH; x++) {
+			delete this->columns[x];
+		}
+		delete this->columns;
+	}
+	
 	FrameColumn operator[] (unsigned int x) {
 		return *this->columns[x];
 	}

@@ -29,7 +29,7 @@ extern "C" void stop() {
 	}
 	
 	app->stop();
-	if (!appThread != 0) {
+	if (appThread != 0) {
 		appThread->join();
 		delete appThread;
 		appThread = 0;

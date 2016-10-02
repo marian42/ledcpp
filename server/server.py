@@ -58,7 +58,6 @@ def run(app_name):
 			print apprunner.compile_output
 			return apprunner.compile_output, 400
 	apprunner.stop()
-	time.sleep(1.0)
 	apprunner.run(selectedApp)
 	return "ok"
 	

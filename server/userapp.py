@@ -81,7 +81,8 @@ class UserApp:
 	def get_main_file(self):
 		return self.get_file(self.shortname + ".cpp")
 				
-	def compile(self):	
+	def compile(self):
+		self.create_app_interface()
 		command = [
 			"gcc",
 			"-fPIC",
@@ -107,7 +108,6 @@ class UserApp:
 		return comm[1] if len(comm[1]) != 0 else comm[0]
 				
 	def load_app_interface(self):
-		print "Copying DLL"
 		global dll_counter
 		filename = self.get_directory() + "bin/" + str(dll_counter) + ".so"
 		
@@ -117,9 +117,7 @@ class UserApp:
 		copyfile(self.get_directory() + "appInterface.so", filename)
 		dll_counter += 1
 		
-		print "Loading DLL"
 		result = ctypes.CDLL(filename)
-		print "Loaded DLL."
 		return ctypes.CDLL(filename)
 		
 	def get_serializable(self):
