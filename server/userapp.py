@@ -4,6 +4,7 @@ import os
 import ctypes
 import subprocess
 import json
+import time
 from shutil import copyfile
 
 USERAPPS_DIRECTORY = "cpp/userapps/"
@@ -82,11 +83,13 @@ class UserApp:
 		return self.get_file(self.shortname + ".cpp")
 				
 	def compile(self):
+		compile_start = time.time()
 		self.create_app_interface()
 		command = [
 			"gcc",
 			"-fPIC",
 			self.get_directory() + APP_INTERFACE_FILENAME,
+			"-J4",
 			"-std=c++11",
 			"-lstdc++",
 			"-shared",
@@ -104,6 +107,7 @@ class UserApp:
 		self.compiled_successfully = shell.returncode == 0
 		if (self.compiled_successfully):
 			self.save()
+		print "Compiled in " + str(time.time() - compile_start) + "."
 		
 		return comm[1] if len(comm[1]) != 0 else comm[0]
 				
