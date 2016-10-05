@@ -63,7 +63,7 @@ def run(app_name):
 	apprunner.stop()
 	apprunner.run(selectedApp)
 	
-	if compiled:
+	if compiled or True:
 		apprunner.save_image(selectedApp.get_image_filename())
 	return "ok"
 	

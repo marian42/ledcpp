@@ -35,7 +35,7 @@ function createAppItem(app) {
 	item.className = "appitem";
 	
 	var img = document.createElement("img");
-	img.src = "screen/" + app.shortname;
+	img.src = "screen/" + app.shortname + "?" + new Date().getTime();
 	img.className = "appscreen";
 	item.appendChild(img);
 	
@@ -95,7 +95,8 @@ function handleButtonIntent(intent) {
 		$.ajax("run/" + selectedApp.shortname, {
 			method: "POST",
 			success: function(data) {
-				$('#status').html("Running " + selectedApp.shortname + ".");		
+				$('#status').html("Running " + selectedApp.shortname + ".");
+				selectedApp.domElement.childNodes[0].src = "screen/" + selectedApp.shortname + "?" + new Date().getTime();
 			},
 			error: function(data) {
 				$('#status').html("Compilation failed.");
