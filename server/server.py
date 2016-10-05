@@ -80,6 +80,11 @@ def get_image(app_name):
 		print "not found"
 		return flask.send_static_file('default.png')
 
-thread.start_new_thread(server.run, (), {'host': '0.0.0.0', 'port': 80})
+
+@server.route("/stream", methods=['GET'])
+def stream():
+	return Response(apprunner.image_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+thread.start_new_thread(server.run, (), {'host': '0.0.0.0', 'port': 80, 'threaded': True})
 while True:
 	time.sleep(1)
