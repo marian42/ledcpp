@@ -56,5 +56,5 @@ public:
 			}
 		}
 		ws2811_render(&ledString);
-	}
+	}	
 };

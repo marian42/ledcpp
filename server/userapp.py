@@ -122,7 +122,9 @@ class UserApp:
 		dll_counter += 1
 		
 		result = ctypes.CDLL(filename)
-		return ctypes.CDLL(filename)
+		result.getFrame.argtypes = []
+		result.getFrame.restype = ctypes.POINTER(ctypes.c_char)
+		return result
 		
 	def get_serializable(self):
 		return {
@@ -130,3 +132,6 @@ class UserApp:
 			"shortname": self.shortname,
 			"files": [file.get_serializable() for file in self.files]
 		}
+		
+	def get_image_filename(self):
+		return self.get_directory() + "screen.png"

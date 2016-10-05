@@ -60,4 +60,14 @@ public:
 	Color* get(unsigned int x, unsigned int y) {
 		return this->pixel[y * this->WIDTH + x];
 	}
+	
+	char* getPixelArray() {
+		char* result = new char[this->WIDTH * this->HEIGHT * 3];
+		for (int i = 0; i < this->WIDTH * this->HEIGHT; i++) {
+			result[i * 3 + 0] = this->pixel[i]->r;
+			result[i * 3 + 1] = this->pixel[i]->g;
+			result[i * 3 + 2] = this->pixel[i]->b;			
+		}
+		return result;
+	}
 };

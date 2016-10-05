@@ -5,6 +5,8 @@ import time
 import apps
 import json
 import apprunner
+import os
+from nocache import nocache
 
 app_list = apps.load_apps()
 server = Flask(__name__, static_folder='../client/', static_url_path='')
@@ -52,6 +54,7 @@ def run(app_name):
 		return "App not found", 404
 	selectedApp = app_list[app_name]
 	
+	compiled = not selectedApp.compiled_successfully
 	if not selectedApp.compiled_successfully:
 		apprunner.stop()
 		if not apprunner.compile(selectedApp):
@@ -59,11 +62,23 @@ def run(app_name):
 			return apprunner.compile_output, 400
 	apprunner.stop()
 	apprunner.run(selectedApp)
+	
+	if compiled:
+		apprunner.save_image(selectedApp.get_image_filename())
 	return "ok"
 	
-@server.route("/screen/<app>", methods=['GET'])
-def get_image(app):
-	return server.send_static_file('default.png')
+@server.route("/screen/<app_name>", methods=['GET'])
+@nocache
+def get_image(app_name):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
+	filename = selectedApp.get_image_filename()
+	if os.path.isfile(filename):
+		return send_from_directory(os.getcwd(), filename)
+	else:
+		print "not found"
+		return flask.send_static_file('default.png')
 
 thread.start_new_thread(server.run, (), {'host': '0.0.0.0', 'port': 80})
 while True:

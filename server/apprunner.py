@@ -1,4 +1,4 @@
-from userapp import UserApp
+from PIL import Image
 import os
 import time
 
@@ -36,3 +36,19 @@ def stop():
 		return
 	interface.stop()
 	interface = None
+	
+def save_image(filename):
+	pixels = interface.getFrame()
+	
+	image = Image.new('RGB', (16, 16))
+	pixels_out = image.load()
+	
+	for x in range(16):
+		for y in range(16):
+			color = (
+				ord(pixels[(y * 16 + x) * 3 + 0]),
+				ord(pixels[(y * 16 + x) * 3 + 1]),
+				ord(pixels[(y * 16 + x) * 3 + 2]))
+			pixels_out[x, y] = color
+	
+	image.save(filename, "PNG")

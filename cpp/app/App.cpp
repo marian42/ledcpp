@@ -71,4 +71,9 @@ public:
 			return 1000 * this->FPS_AVERAGE_COUNT / deltaTSum;
 		}
 	}
+	
+	Screen& getScreen() {
+		while (this->frameCount == 0);
+		return this->screen;
+	}
 };

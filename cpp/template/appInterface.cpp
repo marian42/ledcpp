@@ -43,3 +43,7 @@ extern "C" int getFPS() {
 	}
 	return app->getFPS();
 }
+
+extern "C" char* getFrame() {
+	return app->getScreen().frame.getPixelArray();
+}
