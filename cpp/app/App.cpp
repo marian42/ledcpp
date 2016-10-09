@@ -10,6 +10,7 @@ private:
 	
 	int lastDeltaT[FPS_AVERAGE_COUNT];
 	long lastUpdate;
+	long startTime;
 	
 	bool stopped;
 	
@@ -21,7 +22,7 @@ private:
 	}
 	
 	void updateTime() {
-		this->time = getTime();
+		this->time = getTime() - this->startTime;
 		this->deltaT = this->time - this->lastUpdate;
 		this->lastDeltaT[this->frameCount % this->FPS_AVERAGE_COUNT] = this->deltaT;
 		this->lastUpdate = this->time;
@@ -47,8 +48,9 @@ protected:
 public:
 	App() {
 		this->frameCount = 0;
-		this->lastUpdate = getTime();
+		this->lastUpdate = 0;
 		this->stopped = false;
+		this->startTime = getTime();
 	}
 
 	virtual void run() = 0;
