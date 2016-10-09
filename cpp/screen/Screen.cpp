@@ -1,7 +1,7 @@
 #include "Frame.cpp"
 #include <cstdint>
-#include <math.h>
 #include "rpi_ws281x/ws2811.h"
+#include <math.h>
 
 #define TARGET_FREQ		WS2811_TARGET_FREQ
 #define GPIO_PIN		18
@@ -37,24 +37,28 @@ private:
 				+ (processColor(color->b) << 0);
 	}
 	
-public:
-	Frame frame;
-	float brightness;
-	float gamma;
-	
 	Screen() {
 		this->brightness = 1.0;
 		this->gamma = 2.0;
 		this->initializeLEDString();
 	}
 	
-	void update() {
+public:
+	float brightness;
+	float gamma;
+	
+	void update(Frame& frame) {
 		for (int x = 0; x < Frame::WIDTH; x++) {
 			for (int y = 0; y < Frame::HEIGHT; y++) {
 				int address = y * Frame::HEIGHT + (y % 2 == 0 ? x : Frame::WIDTH - 1 - x);
-				this->ledString.channel[0].leds[address] = colorToInt(&(this->frame[x][y]));
+				this->ledString.channel[0].leds[address] = colorToInt(&(frame[x][y]));
 			}
 		}
 		ws2811_render(&ledString);
-	}	
+	}
+	
+	static Screen& getInstance() {
+		static Screen instance;	
+		return instance;
+	}
 };

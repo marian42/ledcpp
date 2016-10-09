@@ -30,18 +30,23 @@ def run(userapp):
 	global interface
 	global running
 	stop()
+	#if interface != None:
+		#interface.deleteApp()
 	interface = userapp.load_app_interface()
 	interface.start()
 	running = True
 	
 def stop():
-	global interface
+	global running
+	if interface != None and running:
+		interface.stop()
+	running = False
+	
+def fadeout():
 	global running
 	running = False
-	if interface == None:
-		return
-	interface.stop()
-	interface = None
+	if interface != None:
+		interface.fadeout()
 
 def get_image():
 	pixels = interface.getFrame()
@@ -64,7 +69,7 @@ def save_image(filename):
 	
 def image_stream():
     while True:
-		while interface == None or not running:
+		while not running:
 			time.sleep(0.1)
 		image = get_image()
 		output = StringIO.StringIO()

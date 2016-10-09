@@ -67,6 +67,16 @@ def run(app_name):
 		apprunner.save_image(selectedApp.get_image_filename())
 	return "ok"
 	
+@server.route("/stop", methods=['POST'])
+def stop():
+	apprunner.stop()
+	return "ok"
+	
+@server.route("/fadeout", methods=['POST'])
+def fadeout():
+	apprunner.fadeout()
+	return "ok"
+	
 @server.route("/screen/<app_name>", methods=['GET'])
 @nocache
 def get_image(app_name):

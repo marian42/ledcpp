@@ -1,5 +1,6 @@
 #include "../screen/Screen.cpp"
 #include <chrono>
+#include <math.h>
 
 class InterruptException: public std::exception { };
 
@@ -27,14 +28,14 @@ private:
 	}
 
 protected:
-	Screen screen;
+	Frame frame;
 	
 	long time;
 	long deltaT;
 	long frameCount;
 	
 	void update() {
-		this->screen.update();
+		Screen::getInstance().update(this->frame);
 		this->updateTime();
 		this->frameCount++;
 		
@@ -72,8 +73,8 @@ public:
 		}
 	}
 	
-	Screen& getScreen() {
+	Frame& getFrame() {
 		while (this->frameCount == 0);
-		return this->screen;
+		return this->frame;
 	}
 };

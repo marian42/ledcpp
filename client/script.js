@@ -133,6 +133,12 @@ function saveFile(intent) {
 $('#btnUpload').click(function() {saveFile("update")});
 $('#btnCompile').click(function() {saveFile("compile")});
 $('#btnRun').click(function() {saveFile("run")});
+$('#btnStop').click(function() {
+	$.ajax("stop", {method: "POST"});
+});
+$('#btnFadeout').click(function() {
+	$.ajax("fadeout", {method: "POST"});
+});
 
 codeEditor.setSize("100%", "100%");
 updateApps();

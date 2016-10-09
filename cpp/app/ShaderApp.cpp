@@ -7,7 +7,7 @@ protected:
 	void loop() {
 		for (int x = 0; x < Frame::WIDTH; x++) {
 			for (int y = 0; y < Frame::HEIGHT; y++) {
-				mainImage(this->screen.frame[x][y], x, y);
+				mainImage(this->frame[x][y], x, y);
 			}
 		}
 	}
