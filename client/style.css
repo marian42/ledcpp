@@ -132,3 +132,9 @@ body, html, .container-fluid, .sidebar, .body {
     width: 100%;
     height: 1000px;
 }
+
+.navbar-brand {
+	background-image: url(logo.png);
+	background-repeat: no-repeat;
+	padding-left: 60px;
+}
