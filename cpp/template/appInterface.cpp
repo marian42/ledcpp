@@ -5,6 +5,7 @@
 #include <thread>
 #include <chrono>
 #include <math.h>
+#include "../../helpers.cpp"
 
 using namespace std;
 
@@ -64,30 +65,47 @@ long getTime() {
 	return millis.count();
 }
 
-extern "C" void fadeout() {
-	stop();
+void crtAnimation() {
 	Frame frame;
-	
-	if (app == 0) {
-		Screen::getInstance().update(frame);
-		return;
-	}
-	
 	const int duration = 500;
 	long start = getTime();
 	while (true) {
 		float progress = (float)(getTime() - start) / duration;
-		for (int x = 0; x < 16; x++) {
-			for (int y = 0; y < 16; y++) {
-				frame[x][y].set(
-					max(0, int(float(app->getFrame()[x][y].r) * (1.0 - progress))),
-					max(0, int(float(app->getFrame()[x][y].g) * (1.0 - progress))),
-					max(0, int(float(app->getFrame()[x][y].b) * (1.0 - progress))));
+		Color white = Color(255, 255, 255);
+		frame.clear();
+		if (progress < 0.5) {
+			float progress1 = progress * 2.0;
+			for (int x = 0; x < 16; x++) {
+				for (int y = 0; y < 16; y++) {
+					int ySource = 8 + (int)((y - 8.0) / (1.0 - progress1));
+					if (ySource >= 0 && ySource < 16) {
+						frame[x][y].blend(app->getFrame()[x][ySource], white, pow(progress1, 2.0));
+					}
+				}
+			}
+		} else {
+			float progress2 = (progress - 0.5) * 2.0;
+			for (int x = 0; x < 16; x++) {
+				frame[x][8].set(clamp((7 - abs(x - 8)) - progress2 * 8.0, 0.0, 1.0) * 255.0);
 			}
 		}
 		Screen::getInstance().update(frame);
 		if (progress >= 1.0) {
+			frame.clear();
+			Screen::getInstance().update(frame);
 			return;
 		}
 	}
+}
+
+extern "C" void fadeout() {
+	stop();
+	
+	if (app == 0) {
+		Frame frame;
+		Screen::getInstance().update(frame);
+		return;
+	}
+	
+	crtAnimation();
 }

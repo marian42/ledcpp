@@ -70,4 +70,16 @@ public:
 		}
 		return result;
 	}
+	
+	void clear(Color color) {
+		for (int x = 0; x < this->WIDTH; x++) {
+			for (int y = 0; y < this->HEIGHT; y++) {
+				(*this)[x][y].set(color);
+			}
+		}
+	}
+	
+	void clear() {
+		this->clear(Color(0, 0, 0));
+	}
 };

@@ -27,8 +27,8 @@ public:
 		this->set(brightness, brightness, brightness);
 	}
 	
-	void copy(Color* color) {
-		this->set(color->r, color->g, color->b);
+	void set(Color& color) {
+		this->set(color.r, color.g, color.b);
 	}
 	
 	unsigned int toInt() {
@@ -74,5 +74,11 @@ public:
 	
 	void hue(int hue) {
 		hsv(hue, 255, 255);
+	}
+	
+	void blend(Color& c1, Color& c2, float progress) {
+		set(c1.r * (1.0 - progress) + c2.r * progress,
+			c1.g * (1.0 - progress) + c2.g * progress,
+			c1.b * (1.0 - progress) + c2.b * progress);
 	}
 };
