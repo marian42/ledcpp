@@ -21,7 +21,7 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body>
+  <body class="nocompiler">
 	<nav class="navbar navbar-default" style="margin-bottom:0px; border-radius:0px;">
 	  <div class="container-fluid">
 		<div class="navbar-header">
@@ -40,8 +40,8 @@
 		  <ul class="nav navbar-nav navbar-right">
 			<li><a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:10px;"></span>Create new App</a></li>
 			<li><a href="#" title="Stop", id="btnStop"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a></li>
-			<li><a href="#" title="Blank Screen", id="btnFadeout"><span class="glyphicon glyphicon-unchecked" aria-hidden="true"></span></a></li>
-			<li><a href="#" title="Show Compile output", id="btnCompiler"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a></li>
+			<li><a href="#" title="Blank Screen", id="btnFadeout"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a></li>
+			<li><a href="#" title="Show/Hide Compile output", id="btnCompiler"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a></li>
 		  </ul>
 		</div>
 	  </div>
@@ -55,6 +55,13 @@
 	</div>
 	<div class="main-content">
 		<div id="codewrapper" class="editor"></div>
+	</div>
+	<div class="compiler-wrapper">
+		<div class="compiler-headline">
+			Compiler
+			<a id="btnHideCompiler" class="glyphicon glyphicon-remove"></a>
+		</div>
+		<div id="compilerText"></div>
 	</div>
 	
 </body>

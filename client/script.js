@@ -82,10 +82,15 @@ function handleButtonIntent(intent) {
 		$.ajax("compile/" + selectedApp.shortname, {
 			method: "POST",
 			success: function(data) {
-				$('#status').html("Compiled successfully.");		
+				$('#status').html("Compiled successfully.");
+				showCompiler(false);
 			},
 			error: function(data) {
 				$('#status').html("Compilation failed.");
+				if (data.responseJSON.compilerMessage != null) {					
+					$('#compilerText').text(data.responseJSON.compilerMessage);
+					showCompiler(true);
+				}
 			}
 		});
 	}
@@ -97,9 +102,16 @@ function handleButtonIntent(intent) {
 			success: function(data) {
 				$('#status').html("Running " + selectedApp.shortname + ".");
 				selectedApp.domElement.childNodes[0].src = "screen/" + selectedApp.shortname + "?" + new Date().getTime();
+				showCompiler(false);
 			},
 			error: function(data) {
-				$('#status').html("Compilation failed.");
+				if (data.responseJSON.compilerMessage != null) {					
+					$('#status').html("Compilation failed.");
+					$('#compilerText').text(data.responseJSON.compilerMessage);
+					showCompiler(true);
+				} else {
+					$('#status').html("Failed to run app.");
+				}
 			}
 		});
 	}
@@ -130,15 +142,22 @@ function saveFile(intent) {
 	});
 }
 
-$('#btnUpload').click(function() {saveFile("update")});
-$('#btnCompile').click(function() {saveFile("compile")});
-$('#btnRun').click(function() {saveFile("run")});
+function showCompiler(show) {
+	$(document.body).removeClass(show ? "nocompiler" : "compiler");
+	$(document.body).addClass(show ? "compiler" : "nocompiler");
+}
+
+$('#btnUpload').click(function() {saveFile("update");});
+$('#btnCompile').click(function() {saveFile("compile");});
+$('#btnRun').click(function() {saveFile("run");});
 $('#btnStop').click(function() {
 	$.ajax("stop", {method: "POST"});
 });
 $('#btnFadeout').click(function() {
 	$.ajax("fadeout", {method: "POST"});
 });
+$('#btnCompiler').click(function() {showCompiler($(document.body).hasClass("nocompiler"));});
+$('#btnHideCompiler').click(function() {showCompiler(false);});
 
 codeEditor.setSize("100%", "100%");
 updateApps();

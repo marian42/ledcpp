@@ -34,6 +34,11 @@ def update(app_name, filename):
 	selectedApp.compiled_successfully = False
 	return "ok"
 	
+def get_compiler_json(message):
+	result = {}
+	result["compilerMessage"] = message
+	return Response(json.dumps(result), mimetype='application/json', status = 400)
+	
 @server.route("/compile/<app_name>", methods=['POST'])
 def compile(app_name):
 	if not app_name in app_list.keys():
@@ -44,7 +49,7 @@ def compile(app_name):
 	
 	if not apprunner.compile(selectedApp):
 		print apprunner.compile_output
-		return apprunner.compile_output, 400
+		return get_compiler_json(apprunner.compile_output)
 	else:
 		return "ok"
 		
@@ -59,7 +64,7 @@ def run(app_name):
 		apprunner.stop()
 		if not apprunner.compile(selectedApp):
 			print apprunner.compile_output
-			return apprunner.compile_output, 400
+			return get_compiler_json(apprunner.compile_output)
 	apprunner.stop()
 	apprunner.run(selectedApp)
 	
