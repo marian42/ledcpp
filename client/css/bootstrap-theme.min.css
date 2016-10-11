@@ -314,8 +314,8 @@ h2,h3{page-break-after:avoid}
 *,:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 body{font-family:Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#C9C9C9;background-color:#191919}
 button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}
-a{color:#2a9fd6;text-decoration:none}
-a:focus,a:hover{color:#2a9fd6;text-decoration:underline}
+a{color:#ffffff;text-decoration:none}
+a:focus,a:hover{color:#ffffff;text-decoration:underline}
 a:focus{outline:-webkit-focus-ring-color auto 5px;outline-offset:-2px}
 .carousel-inner>.item>a>img,.carousel-inner>.item>img,.img-responsive,.thumbnail a>img,.thumbnail>img{display:block;max-width:100%;height:auto}
 .img-rounded{border-radius:6px}
