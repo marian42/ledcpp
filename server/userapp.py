@@ -5,7 +5,7 @@ import ctypes
 import subprocess
 import json
 import time
-from shutil import copyfile
+from shutil import copyfile, rmtree
 
 USERAPPS_DIRECTORY = "cpp/userapps/"
 APP_INTERFACE_FILENAME = "appInterface.cpp"
@@ -135,3 +135,6 @@ class UserApp:
 		
 	def get_image_filename(self):
 		return self.get_directory() + "screen.png"
+		
+	def delete(self):
+		rmtree(self.get_directory())

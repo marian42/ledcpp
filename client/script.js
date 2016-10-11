@@ -183,6 +183,24 @@ function createApp() {
 	});
 }
 
+function deleteApp() {
+	if (selectedApp == null) return;
+	if (!confirm("Do you want to permanently delete " + selectedApp.shortname + "?")) return;
+	
+	$.ajax("delete/" + selectedApp.shortname, {
+		method: "POST",
+		success: function(data) {
+			$('#status').html("Deleted " + selectedApp.shortname + ".");
+			selectedApp.domElement.parentNode.removeChild(selectedApp.domElement);
+			delete apps[selectedApp.shortname];
+			selectedApp = null;
+		},
+		error: function() {
+			$('#status').html("Failed to delete " + selectedApp.shortname + ".");			
+		}
+	});
+}
+
 $('#btnUpload').click(function() {saveFile("update");});
 $('#btnCompile').click(function() {saveFile("compile");});
 $('#btnRun').click(function() {saveFile("run");});
@@ -198,6 +216,7 @@ $('#btnHideCompiler').click(function() {showCompiler(false);});
 $('#btnShowCreateApp').click(function() { $('#createAppForm').slideDown(); });
 $('#btnHideCreateApp').click(function() { $('#createAppForm').slideUp(); });
 $('#btnCreateApp').click(createApp);
+$('#btnDeleteApp').click(deleteApp);
 
 codeEditor.setSize("100%", "100%");
 updateApps();

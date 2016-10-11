@@ -127,7 +127,18 @@ def create_app():
 	file.save()
 	
 	return "ok"
-
+	
+@server.route("/delete/<app_name>", methods=['POST'])
+def delete_app(app_name):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
+	selectedApp.delete()
+	
+	del app_list[selectedApp.shortname]	
+	return "ok"
+	
+	
 thread.start_new_thread(server.run, (), {'host': '0.0.0.0', 'port': 80, 'threaded': True})
 while True:
 	time.sleep(1)
