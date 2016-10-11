@@ -145,11 +145,11 @@ body, html, .container-fluid, .sidebar, .body {
 	left: 50%;
 	margin-left: -300px;
 	margin-top: 50px;
-	
 }
 
-.panel {
+#createAppForm {
 	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+	display: none;
 }
 
 .form-table td{

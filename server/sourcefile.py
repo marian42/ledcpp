@@ -25,3 +25,17 @@ class SourceFile:
 			"filename": self.filename,
 			"content": self.content
 		}
+		
+	def load_template(self, index):
+		filename = "cpp/template/"
+		if index == 0:
+			filename += "App.cpp"
+		elif index == 1:
+			filename += "LoopApp.cpp"
+		elif index == 2:
+			filename += "ShaderApp.cpp"
+		else:
+			return
+			
+		with open(filename, 'r') as file:
+			self.content = file.read()

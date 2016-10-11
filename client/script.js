@@ -58,7 +58,7 @@ function createAppItem(app) {
 	return item;
 }
 
-function updateApps() {
+function updateApps(appToSelect) {
 	$.ajax("apps", {
 		success: function(data) {
 			for (var i = 0; i < data.length; i++) {
@@ -66,6 +66,9 @@ function updateApps() {
 					apps[data[i].shortname] = data[i];			
 					apps[data[i].shortname].domElement = createAppItem(data[i]);
 					apps[data[i].shortname].modified = false;
+					if (appToSelect != null && data[i].shortname == appToSelect) {
+						selectApp(apps[data[i].shortname]);
+					}
 				}
 			}
 			
@@ -147,6 +150,39 @@ function showCompiler(show) {
 	$(document.body).addClass(show ? "compiler" : "nocompiler");
 }
 
+var selectedTemplate = 2;
+
+function templateSelectorClick(event) {
+	var element = event.target;
+	selectedTemplate = $($(element)[0].parentNode.parentNode.children).index($(element)[0].parentNode);
+	$('#btnTemplateText').text($(event.target).text());
+}
+
+function createApp() {
+	var name = $('#inputAppName').val();
+	var shortName = $('#inputShortName').val();
+	$('#createAppForm').slideUp();
+	
+	$.ajax("create", {
+		method: "POST",
+		data: {
+			template: selectedTemplate,
+			name: name,
+			shortName: shortName
+		},
+		success: function(data) {
+			$('#status').html("Created " + shortName + ".cpp.");
+			$('#inputAppName').val('');
+			$('#inputShortName').val('');
+			updateApps(shortName);
+		},
+		error: function(data) {
+			$('#createAppForm').slideDown();
+			$('#status').html(data.responseText);
+		}
+	});
+}
+
 $('#btnUpload').click(function() {saveFile("update");});
 $('#btnCompile').click(function() {saveFile("compile");});
 $('#btnRun').click(function() {saveFile("run");});
@@ -158,6 +194,10 @@ $('#btnFadeout').click(function() {
 });
 $('#btnCompiler').click(function() {showCompiler($(document.body).hasClass("nocompiler"));});
 $('#btnHideCompiler').click(function() {showCompiler(false);});
+
+$('#btnShowCreateApp').click(function() { $('#createAppForm').slideDown(); });
+$('#btnHideCreateApp').click(function() { $('#createAppForm').slideUp(); });
+$('#btnCreateApp').click(createApp);
 
 codeEditor.setSize("100%", "100%");
 updateApps();

@@ -1,4 +1,5 @@
 from flask import *
+from userapp import UserApp
 import thread
 import logging
 import time
@@ -7,6 +8,7 @@ import json
 import apprunner
 import os
 from nocache import nocache
+import string
 
 app_list = apps.load_apps()
 server = Flask(__name__, static_folder='../client/', static_url_path='')
@@ -86,19 +88,45 @@ def fadeout():
 @nocache
 def get_image(app_name):
 	if not app_name in app_list.keys():
-		return "App not found", 404
+		return server.send_static_file('default.png')
 	selectedApp = app_list[app_name]
 	filename = selectedApp.get_image_filename()
 	if os.path.isfile(filename):
 		return send_from_directory(os.getcwd(), filename)
 	else:
 		print "not found"
-		return flask.send_static_file('default.png')
+		return server.send_static_file('default.png')
 
 
 @server.route("/stream", methods=['GET'])
 def stream():
 	return Response(apprunner.image_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+	
+@server.route("/create", methods=['POST'])
+def create_app():
+	selected_template = int(request.form["template"])
+	name = request.form["name"]
+	short_name = request.form["shortName"]
+	
+	if short_name in app_list:
+		return "An app with this file name alread exists.", 400		
+	if len(short_name) < 4:
+		return "File name too short.", 400
+	if selected_template < 0 or selected_template > 2:
+		return "Unknown template selected.", 400
+	if any((not char in string.letters + string.digits) for char in short_name):
+		return "File name may only contain letters or digits", 400
+	
+	new_app = UserApp(short_name)
+	new_app.name = name
+	new_app.initialize()
+	app_list[name] = new_app
+	
+	file = new_app.get_main_file()
+	file.load_template(selected_template)
+	file.save()
+	
+	return "ok"
 
 thread.start_new_thread(server.run, (), {'host': '0.0.0.0', 'port': 80, 'threaded': True})
 while True:

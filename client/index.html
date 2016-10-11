@@ -38,7 +38,7 @@
 			<li><a href="#" id="status">Ready</a></li>
 		  </ul>
 		  <ul class="nav navbar-nav navbar-right">
-			<li><a href="#"><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:10px;"></span>Create new App</a></li>
+			<li><a href="#" title="Create new App" id="btnShowCreateApp"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a></li>
 			<li><a href="#" title="Stop", id="btnStop"><span class="glyphicon glyphicon-stop" aria-hidden="true"></span></a></li>
 			<li><a href="#" title="Blank Screen", id="btnFadeout"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a></li>
 			<li><a href="#" title="Show/Hide Compile output", id="btnCompiler"><span class="glyphicon glyphicon-align-left" aria-hidden="true"></span></a></li>
@@ -65,7 +65,7 @@
 	</div>
 
 	<div class="dialog-wrapper">
-		<div class="panel panel-default">
+		<div class="panel panel-default" id="createAppForm">
 			<div class="panel-heading">Create new App</div>
 			<div class="panel-body">
 				<table class="form-table">
@@ -74,15 +74,15 @@
 						<td>						
 							<!-- Split button -->
 							<div class="btn-group">
-							  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Shader App
+							  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnTemplate">
+								<span id="btnTemplateText">Shader App</span>
 								<span class="caret"></span>
 								<span class="sr-only">Toggle Dropdown</span>
 							  </button>
 							  <ul class="dropdown-menu">
-								<li><a href="#">App</a></li>
-								<li><a href="#">Looping App</a></li>
-								<li><a href="#">Shader App</a></li>
+								<li><a href="#" onclick="templateSelectorClick(event);">App</a></li>
+								<li><a href="#" onclick="templateSelectorClick(event);">Looping App</a></li>
+								<li><a href="#" onclick="templateSelectorClick(event);">Shader App</a></li>
 							  </ul>
 							</div>
 						</td>
@@ -91,7 +91,7 @@
 						<td>Name</td>
 						<td>
 							<div class="input">
-							  <input type="text" class="form-control" placeholder="My Example App">
+							  <input id="inputAppName" type="text" class="form-control" placeholder="My Example App">
 							</div>
 						</td>
 					</tr>
@@ -99,15 +99,15 @@
 						<td>File Name</td>
 						<td>
 							<div class="input-group" style="font-family:monospace;">
-							  <input type="text" class="form-control" placeholder="MyExampleApp" aria-describedby="basic-addon2">
+							  <input id="inputShortName" type="text" class="form-control" placeholder="MyExampleApp" aria-describedby="basic-addon2">
 							  <span class="input-group-addon" id="basic-addon2">.cpp</span>
 							</div>
 						</td>
 					</tr>
 				</table>
 				<div style="text-align:right;">
-					<button type="button" class="btn btn-default">Cancel</button>
-					<button type="button" class="btn btn-default">Create App</button>
+					<button type="button" class="btn btn-default" id="btnHideCreateApp">Cancel</button>
+					<button type="button" class="btn btn-default" id="btnCreateApp">Create App</button>
 				</div>
 			</div>
 		</div>
