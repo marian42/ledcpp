@@ -26,7 +26,7 @@ class SourceFile:
 			"content": self.content
 		}
 		
-	def load_template(self, index):
+	def load_template(self, index, shortname):
 		filename = "cpp/template/"
 		if index == 0:
 			filename += "App.cpp"
@@ -38,4 +38,4 @@ class SourceFile:
 			return
 			
 		with open(filename, 'r') as file:
-			self.content = file.read()
+			self.content = file.read().replace("<AppName>", shortname)

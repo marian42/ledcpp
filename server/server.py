@@ -120,10 +120,10 @@ def create_app():
 	new_app = UserApp(short_name)
 	new_app.name = name
 	new_app.initialize()
-	app_list[name] = new_app
+	app_list[short_name] = new_app
 	
 	file = new_app.get_main_file()
-	file.load_template(selected_template)
+	file.load_template(selected_template, short_name)
 	file.save()
 	
 	return "ok"
