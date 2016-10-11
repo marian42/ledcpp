@@ -138,3 +138,20 @@ body, html, .container-fluid, .sidebar, .body {
 	background-repeat: no-repeat;
 	padding-left: 60px;
 }
+
+.dialog-wrapper {
+	position: fixed;
+	width: 600px;
+	left: 50%;
+	margin-left: -300px;
+	margin-top: 50px;
+	
+}
+
+.panel {
+	box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.75);
+}
+
+.form-table td{
+	padding: 10px;
+}
