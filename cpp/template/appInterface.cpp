@@ -1,11 +1,11 @@
 #include "../../app/ShaderApp.cpp"
 #include <iostream>
+#include "../../helpers.cpp"
 #include "<AppName>.cpp"
 #include <unistd.h>
 #include <thread>
 #include <chrono>
 #include <math.h>
-#include "../../helpers.cpp"
 
 using namespace std;
 
