@@ -110,7 +110,7 @@ def create_app():
 	
 	if short_name in app_list:
 		return "An app with this file name alread exists.", 400		
-	if len(short_name) < 4:
+	if len(short_name) < 3:
 		return "File name too short.", 400
 	if selected_template < 0 or selected_template > 2:
 		return "Unknown template selected.", 400
