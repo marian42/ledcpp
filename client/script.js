@@ -5,7 +5,10 @@ var codeEditor = CodeMirror(document.getElementById("codewrapper"), {
   value: "",
   mode:  "text/x-c++src",
   theme: "base16-dark",
-  lineNumbers: true
+  lineNumbers: true,
+  indentWithTabs: true,
+  indentUnit: 4,
+  lineWrapping: true
 });
 
 codeEditor.on("changes", function() {
