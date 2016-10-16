@@ -129,21 +129,23 @@ function saveFile(intent) {
 		return;
 	}
 	
-	$('#status').html("Uploading " + selectedApp.shortname + ".cpp...");
+	$('#btnUpload span').css("color", "#FFD800");
 	$.ajax("save/" + selectedApp.shortname + "/" + selectedApp.files[0].filename, {
 		method: "POST",
 		processData: false,
 		data: codeEditor.getValue(),
 		contentType: 'text/plain',
 		success: function(data) {
-			$('#status').html("Uploaded " + selectedApp.shortname + ".cpp.");
+			$('#btnUpload span').css("color", "#00CC1B");
+			$('#btnUpload span').animate({color: "#C9C9C9"}, 3000);
 			selectedApp.modified = false;
 			$(selectedApp.domElement).removeClass("modified");
 			
 			handleButtonIntent(intent);
 		},
 		error: function() {
-			$('#status').html("Uploading failed.");
+			$('#btnUpload span').css("color", "#FF0000");
+			$('#btnUpload span').animate({color: "#C9C9C9"}, 3000);			
 		}
 	});
 }
@@ -222,4 +224,7 @@ $('#btnCreateApp').click(createApp);
 $('#btnDeleteApp').click(deleteApp);
 
 codeEditor.setSize("100%", "100%");
+codeEditor.setOption("extraKeys", {
+	"Ctrl-S": saveFile
+});
 updateApps();
