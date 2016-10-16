@@ -18,7 +18,7 @@ body, html, .container-fluid, .sidebar, .body {
 }
 
 .main-content {
-    background-color:#272822;
+    background-color:#151515;
     height: calc(100% - 52px);
     left:300px;
     position: fixed;

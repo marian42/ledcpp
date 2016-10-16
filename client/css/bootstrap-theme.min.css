@@ -312,7 +312,7 @@ h2,h3{page-break-after:avoid}
 .glyphicon-menu-down:before{content:"\e259"}
 .glyphicon-menu-up:before{content:"\e260"}
 *,:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
-body{font-family:Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#C9C9C9;background-color:#191919}
+body{font-family:Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#C9C9C9;}
 button,input,select,textarea{font-family:inherit;font-size:inherit;line-height:inherit}
 a{color:#ffffff;text-decoration:none}
 a:focus,a:hover{color:#ffffff;text-decoration:underline}
@@ -1454,3 +1454,4 @@ a.list-group-item-warning.active{background-color:#f80}
 a.list-group-item-warning.active:focus,a.list-group-item-warning.active:hover{background-color:#e67a00}
 a.list-group-item-danger.active{background-color:#c00}
 a.list-group-item-danger.active:focus,a.list-group-item-danger.active:hover{background-color:#b30000}
+body{background-color: #151515}

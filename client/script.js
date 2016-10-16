@@ -151,8 +151,12 @@ function saveFile(intent) {
 }
 
 function showCompiler(show) {
-	$(document.body).removeClass(show ? "nocompiler" : "compiler");
-	$(document.body).addClass(show ? "compiler" : "nocompiler");
+	$('.compiler-wrapper').effect("slide", {direction: "right", mode: show ? "show" : "hide", complete:
+		function() {
+			$(document.body).removeClass(show ? "nocompiler" : "compiler");
+			$(document.body).addClass(show ? "compiler" : "nocompiler");
+		}
+	}, 200);
 }
 
 var selectedTemplate = 2;
@@ -218,8 +222,8 @@ $('#btnFadeout').click(function() {
 $('#btnCompiler').click(function() {showCompiler($(document.body).hasClass("nocompiler"));});
 $('#btnHideCompiler').click(function() {showCompiler(false);});
 
-$('#btnShowCreateApp').click(function() { $('#createAppForm').slideDown(); });
-$('#btnHideCreateApp').click(function() { $('#createAppForm').slideUp(); });
+$('#btnShowCreateApp').click(function() { $('#createAppForm').effect("slide", {direction: "up", mode: "show", distance: 520}); });
+$('#btnHideCreateApp').click(function() { $('#createAppForm').effect("slide", {direction: "up", mode: "hide", distance: 520}); });
 $('#btnCreateApp').click(createApp);
 $('#btnDeleteApp').click(deleteApp);
 
