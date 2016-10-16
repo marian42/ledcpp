@@ -56,8 +56,10 @@ function createAppItem(app) {
 	
 	$(item).click(function() {
 		selectApp(app);
-	})
-	
+	});	
+	$(item).dblclick(function() {
+		runApp(app);
+	});
 	return item;
 }
 
@@ -82,6 +84,27 @@ function updateApps(appToSelect) {
 	});
 }
 
+function runApp(app) {
+	$('#status').html("Compiling and Running " + app.shortname + ".cpp...");	
+		$.ajax("run/" + app.shortname, {
+			method: "POST",
+			success: function(data) {
+				$('#status').html("Running " + app.shortname + ".");
+				app.domElement.childNodes[0].src = "screen/" + app.shortname + "?" + new Date().getTime();
+				showCompiler(false);
+			},
+			error: function(data) {
+				if (data.responseJSON.compilerMessage != null) {					
+					$('#status').html("Compilation failed.");
+					$('#compilerText').text(data.responseJSON.compilerMessage);
+					showCompiler(true);
+				} else {
+					$('#status').html("Failed to run app.");
+				}
+			}
+		});
+}
+
 function handleButtonIntent(intent) {
 	if (intent == "compile") {
 		$('#status').html("Compiling " + selectedApp.shortname + ".cpp...");	
@@ -102,24 +125,7 @@ function handleButtonIntent(intent) {
 	}
 	
 	if (intent == "run") {
-		$('#status').html("Compiling and Running " + selectedApp.shortname + ".cpp...");	
-		$.ajax("run/" + selectedApp.shortname, {
-			method: "POST",
-			success: function(data) {
-				$('#status').html("Running " + selectedApp.shortname + ".");
-				selectedApp.domElement.childNodes[0].src = "screen/" + selectedApp.shortname + "?" + new Date().getTime();
-				showCompiler(false);
-			},
-			error: function(data) {
-				if (data.responseJSON.compilerMessage != null) {					
-					$('#status').html("Compilation failed.");
-					$('#compilerText').text(data.responseJSON.compilerMessage);
-					showCompiler(true);
-				} else {
-					$('#status').html("Failed to run app.");
-				}
-			}
-		});
+		runApp(selectedApp);
 	}
 }
 
