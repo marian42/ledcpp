@@ -229,6 +229,9 @@ $('#btnDeleteApp').click(deleteApp);
 
 codeEditor.setSize("100%", "100%");
 codeEditor.setOption("extraKeys", {
-	"Ctrl-S": saveFile
+	"Ctrl-S": saveFile,
+	"Ctrl-Enter": function() {saveFile("run")},
+	"Ctrl-O": function() {saveFile("run")},
+	"Ctrl-K": function() {saveFile("compile")}
 });
 updateApps();
