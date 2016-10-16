@@ -1,3 +1,5 @@
+#include "Simplex.cpp"
+
 extern const float pi = 3.14149;
 
 float getRadius(int x, int y) {
@@ -28,4 +30,35 @@ float modulo(float value, float divisor) {
 
 float map(float value, float oldLow, float oldHigh, float newLow, float newHigh) {
 	return newLow + (newHigh - newLow) * (value - oldLow) / (oldHigh - oldLow);
+}
+
+float noise(float x, float y) {
+	static bool initialized = false;
+	if (!initialized) {
+		initialized = true;
+		std::cout << "init" << std::endl;
+		Simplex::init();
+	}
+	return Simplex::noise(x, y);
+}
+
+int getRing(int x, int y) {
+	return 7 - (x + y > 15 ? min(15 - x, 15 - y) : min(x, y));
+}
+
+int getRingPosition(int x, int y) {
+	int ring = getRing(x, y);
+	if (x + y < 15) {
+		if (x >= y) { // up
+			return x - y + 0 * 2 * (ring + 1);
+		} else { // left
+			return -2 + 2 * ring - y + x + 3 * 2 * (ring + 1);
+		}
+	} else {
+		if (x >= y) { // right
+			return -1 + y - (15 - x) + 1 * 2 * (ring + 1);
+		} else { // down
+			return -2 + y - x + 2 * 2 * (ring + 1);
+		}	
+	}
 }
