@@ -53,6 +53,7 @@ def fadeout():
 	running = False
 	if interface != None:
 		interface.fadeout()
+	reset_state()
 
 def get_image():
 	pixels = interface.getFrame()

@@ -107,7 +107,7 @@ function runApp(app) {
 		},
 		error: function(data) {
 			if (data.responseJSON.compilerMessage != null) {
-				setStatus("Compilation failed.", true);
+				setStatus("Failed to compile" + app.shortname + ".cpp.", true);
 				$('#compilerText').text(data.responseJSON.compilerMessage);
 				showCompiler(true);
 			} else {
@@ -130,7 +130,7 @@ function handleButtonIntent(intent) {
 				showCompiler(false);
 			},
 			error: function(data) {
-				setStatus("Compilation failed", true);
+				setStatus("Failed to compile" + app.shortname + ".cpp.", true);
 				if (data.responseJSON.compilerMessage != null) {					
 					$('#compilerText').text(data.responseJSON.compilerMessage);
 					showCompiler(true);
