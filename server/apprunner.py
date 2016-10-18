@@ -7,6 +7,14 @@ state = "Ready"
 compile_output = ""
 interface = None
 running = False
+current_app = None
+
+def reset_state():
+	global state
+	if running:
+		state = "Running " + current_app.name + "."
+	else:
+		state = "Ready."
 
 def update_state(value):
 	global state
@@ -14,33 +22,31 @@ def update_state(value):
 	print state
 
 def compile(userapp):
-	global compile_output
-	
-	update_state("Compiling " + userapp.shortname + "...")
+	global compile_output	
+	update_state("Compiling " + userapp.name + "...")
 	
 	compile_output = userapp.compile()
 	
-	if userapp.compiled_successfully:
-		update_state("Compiled " + userapp.shortname + " successfully.")
-	else:
-		update_state("Errors while compiling " + userapp.shortname + ".")
+	reset_state()
 	return userapp.compiled_successfully
 		
 def run(userapp):
 	global interface
 	global running
+	global current_app
 	stop()
-	#if interface != None:
-		#interface.deleteApp()
 	interface = userapp.load_app_interface()
 	interface.start()
 	running = True
+	current_app = userapp
+	reset_state()
 	
 def stop():
 	global running
 	if interface != None and running:
 		interface.stop()
 	running = False
+	reset_state()
 	
 def fadeout():
 	global running
@@ -79,4 +85,12 @@ def image_stream():
 		
 		yield (b'--frame\r\n'
 			b'Content-Type: image/png\r\n\r\n' + image_string + b'\r\n')
-		
+			
+def get_status():   
+	result = {}
+	result["state"] = state
+	result["app"] = None if current_app == None else current_app.shortname
+	result["fps"] = None if not running else interface.getFPS()
+	return result
+	
+reset_state()

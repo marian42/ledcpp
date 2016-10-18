@@ -101,6 +101,11 @@ def get_image(app_name):
 @server.route("/stream", methods=['GET'])
 def stream():
 	return Response(apprunner.image_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@server.route("/status", methods=['GET'])
+def status():
+	return Response(json.dumps(apprunner.get_status()), mimetype='application/json', status = 200)
+
 	
 @server.route("/create", methods=['POST'])
 def create_app():

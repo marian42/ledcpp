@@ -1,6 +1,18 @@
 var apps = {};
 var selectedApp = null;
 
+var clientStatus = null;
+var serverStatus = "Connecting...";
+
+function setStatus(value, client) {
+	if (client) {
+		clientStatus = value;
+	} else {
+		serverStatus = value;
+	}	
+	$('#status').html(clientStatus != null ? clientStatus : serverStatus);
+}
+
 var codeEditor = CodeMirror(document.getElementById("codewrapper"), {
   value: "",
   mode:  "text/x-c++src",
@@ -85,37 +97,40 @@ function updateApps(appToSelect) {
 }
 
 function runApp(app) {
-	$('#status').html("Compiling and Running " + app.shortname + ".cpp...");	
-		$.ajax("run/" + app.shortname, {
-			method: "POST",
-			success: function(data) {
-				$('#status').html("Running " + app.shortname + ".");
-				app.domElement.childNodes[0].src = "screen/" + app.shortname + "?" + new Date().getTime();
-				showCompiler(false);
-			},
-			error: function(data) {
-				if (data.responseJSON.compilerMessage != null) {					
-					$('#status').html("Compilation failed.");
-					$('#compilerText').text(data.responseJSON.compilerMessage);
-					showCompiler(true);
-				} else {
-					$('#status').html("Failed to run app.");
-				}
+	setStatus("Connecting...", false);
+	setStatus(null, true);
+	$.ajax("run/" + app.shortname, {
+		method: "POST",
+		success: function(data) {
+			app.domElement.childNodes[0].src = "screen/" + app.shortname + "?" + new Date().getTime();
+			showCompiler(false);
+		},
+		error: function(data) {
+			if (data.responseJSON.compilerMessage != null) {
+				setStatus("Compilation failed.", true);
+				$('#compilerText').text(data.responseJSON.compilerMessage);
+				showCompiler(true);
+			} else {
+				setStatus("Failed to run app.", true);
 			}
-		});
+		}
+	});
 }
 
 function handleButtonIntent(intent) {
 	if (intent == "compile") {
-		$('#status').html("Compiling " + selectedApp.shortname + ".cpp...");	
+		$('#btnCompile span').css("color", "#FFD800");
+		setStatus("Compiling " + selectedApp.shortname + ".cpp...", true);	
 		$.ajax("compile/" + selectedApp.shortname, {
 			method: "POST",
 			success: function(data) {
-				$('#status').html("Compiled successfully.");
+				setStatus(null, true);
+				$('#btnCompile span').css("color", "#00CC1B");
+				$('#btnCompile span').animate({color: "#C9C9C9"}, 3000);
 				showCompiler(false);
 			},
 			error: function(data) {
-				$('#status').html("Compilation failed.");
+				setStatus("Compilation failed", true);
 				if (data.responseJSON.compilerMessage != null) {					
 					$('#compilerText').text(data.responseJSON.compilerMessage);
 					showCompiler(true);
@@ -136,12 +151,14 @@ function saveFile(intent) {
 	}
 	
 	$('#btnUpload span').css("color", "#FFD800");
+	setStatus("Uploading " + selectedApp.shortname + ".cpp...", true);
 	$.ajax("save/" + selectedApp.shortname + "/" + selectedApp.files[0].filename, {
 		method: "POST",
 		processData: false,
 		data: codeEditor.getValue(),
 		contentType: 'text/plain',
 		success: function(data) {
+			setStatus(null, true);
 			$('#btnUpload span').css("color", "#00CC1B");
 			$('#btnUpload span').animate({color: "#C9C9C9"}, 3000);
 			selectedApp.modified = false;
@@ -151,7 +168,8 @@ function saveFile(intent) {
 		},
 		error: function() {
 			$('#btnUpload span').css("color", "#FF0000");
-			$('#btnUpload span').animate({color: "#C9C9C9"}, 3000);			
+			$('#btnUpload span').animate({color: "#C9C9C9"}, 3000);
+			setStatus("Failed to upload.", true);
 		}
 	});
 }
@@ -186,14 +204,14 @@ function createApp() {
 			shortName: shortName
 		},
 		success: function(data) {
-			$('#status').html("Created " + shortName + ".cpp.");
+			setStatus("Created " + shortName + ".cpp.", true);
 			$('#inputAppName').val('');
 			$('#inputShortName').val('');
 			updateApps(shortName);
 		},
 		error: function(data) {
 			$('#createAppForm').slideDown();
-			$('#status').html(data.responseText);
+			setStatus(data.responseText, true);
 		}
 	});
 }
@@ -204,14 +222,30 @@ function deleteApp() {
 	
 	$.ajax("delete/" + selectedApp.shortname, {
 		method: "POST",
-		success: function(data) {
-			$('#status').html("Deleted " + selectedApp.shortname + ".");
+		success: function(data) {			
+			setStatus("Deleted " + selectedApp.shortname + ".", true);
 			selectedApp.domElement.parentNode.removeChild(selectedApp.domElement);
 			delete apps[selectedApp.shortname];
 			selectedApp = null;
 		},
 		error: function() {
-			$('#status').html("Failed to delete " + selectedApp.shortname + ".");			
+			setStatus("Failed to delete " + selectedApp.shortname + ".", true);			
+		}
+	});
+}
+
+function updateStatus() {
+	$.ajax("status", {
+		method: "GET",
+		success: function(data) {			
+			setStatus(data.state, false);
+			$('#fps').html(data.fps != null ? data.fps + " FPS" : "");
+		},
+		error: function() {
+			setStatus("Lost connection to server. Retrying...", false);
+		},
+		complete: function() {
+			setTimeout(updateStatus, 1000);
 		}
 	});
 }
@@ -241,3 +275,4 @@ codeEditor.setOption("extraKeys", {
 	"Ctrl-K": function() {saveFile("compile")}
 });
 updateApps();
+updateStatus();
