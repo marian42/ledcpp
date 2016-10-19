@@ -132,11 +132,13 @@ function handleButtonIntent(intent) {
 				showCompiler(false);
 			},
 			error: function(data) {
-				setStatus("Failed to compile" + app.shortname + ".cpp.", true);
+				setStatus("Failed to compile" + selectedApp.shortname + ".cpp.", true);
 				if (data.responseJSON.compilerMessage != null) {					
 					$('#compilerText').text(data.responseJSON.compilerMessage);
 					showCompiler(true);
 				}
+				$('#btnCompile span').css("color", "#FF0000");
+				$('#btnCompile span').animate({color: "#C9C9C9"}, 3000);
 			}
 		});
 	}
