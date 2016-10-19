@@ -33,13 +33,15 @@ codeEditor.on("changes", function() {
 
 function selectApp(app) {
 	if (selectedApp != null) {
-		oldApp = selectedApp;
-		selectedApp = null;
-		oldApp.files[0].content = codeEditor.getValue();
-		$(oldApp.domElement).removeClass("selected");
+		$(selectedApp.domElement).removeClass("selected");
 	}
 	
-	codeEditor.setValue(app.files[0].content);
+	if (app.files[0].doc == null) {
+		app.files[0].doc = CodeMirror.Doc(app.files[0].content, "text/x-c++src", 1);
+	}
+	
+	codeEditor.swapDoc(app.files[0].doc);
+	
 	$(app.domElement).addClass("selected");
 	selectedApp = app;
 }
