@@ -6,7 +6,7 @@ protected:
 	
 	void loop() {
 		Color color;
-		color.hsv(time / 20, 255, 255);
+		color.hsv(time * 50, 255, 255);
 		frame.clear(color);
 	}
 };
