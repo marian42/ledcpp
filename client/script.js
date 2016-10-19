@@ -274,5 +274,18 @@ codeEditor.setOption("extraKeys", {
 	"Ctrl-O": function() {saveFile("run")},
 	"Ctrl-K": function() {saveFile("compile")}
 });
+
+window.onbeforeunload = function(){
+	var unsavedApps = [];
+	for (var i = 0; i < Object.keys(apps).length; i++) {
+		if (apps[Object.keys(apps)[i]].modified) {
+			unsavedApps.push(apps[Object.keys(apps)[i]].name);
+		}
+	}
+	if (unsavedApps.length > 0) {
+		return "Do you want to leave this page? Changes you made will not be saved.";
+	}
+};
+
 updateApps();
 updateStatus();
