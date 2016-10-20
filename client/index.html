@@ -66,50 +66,52 @@
 	</div>
 
 	<div class="dialog-wrapper">
-		<div class="panel panel-default" id="createAppForm">
+		<div class="panel panel-default" id="createAppPanel">
 			<div class="panel-heading">Create new App</div>
 			<div class="panel-body">
-				<table class="form-table">
-					<tr>
-						<td>Template</td>
-						<td>						
-							<!-- Split button -->
-							<div class="btn-group">
-							  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnTemplate">
-								<span id="btnTemplateText">Shader App</span>
-								<span class="caret"></span>
-								<span class="sr-only">Toggle Dropdown</span>
-							  </button>
-							  <ul class="dropdown-menu">
-								<li><a href="#" onclick="templateSelectorClick(event);">App</a></li>
-								<li><a href="#" onclick="templateSelectorClick(event);">Looping App</a></li>
-								<li><a href="#" onclick="templateSelectorClick(event);">Shader App</a></li>
-							  </ul>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>Name</td>
-						<td>
-							<div class="input">
-							  <input id="inputAppName" type="text" class="form-control" placeholder="My Example App">
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td>File Name</td>
-						<td>
-							<div class="input-group" style="font-family:monospace;">
-							  <input id="inputShortName" type="text" class="form-control" placeholder="MyExampleApp" aria-describedby="basic-addon2">
-							  <span class="input-group-addon" id="basic-addon2">.cpp</span>
-							</div>
-						</td>
-					</tr>
-				</table>
-				<div style="text-align:right;">
-					<button type="button" class="btn btn-default" id="btnHideCreateApp">Cancel</button>
-					<button type="button" class="btn btn-default" id="btnCreateApp">Create App</button>
-				</div>
+				<form id="createAppForm">
+					<table class="form-table">
+						<tr>
+							<td>Template</td>
+							<td>						
+								<!-- Split button -->
+								<div class="btn-group">
+								  <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="btnTemplate">
+									<span id="btnTemplateText">Shader App</span>
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								  </button>
+								  <ul class="dropdown-menu">
+									<li><a href="#" onclick="templateSelectorClick(event);">App</a></li>
+									<li><a href="#" onclick="templateSelectorClick(event);">Looping App</a></li>
+									<li><a href="#" onclick="templateSelectorClick(event);">Shader App</a></li>
+								  </ul>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>Name</td>
+							<td>
+								<div class="input">
+								  <input id="inputAppName" type="text" class="form-control" placeholder="My Example App">
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>File Name</td>
+							<td>
+								<div class="input-group" style="font-family:monospace;">
+								  <input id="inputShortName" type="text" class="form-control" placeholder="MyExampleApp" aria-describedby="basic-addon2">
+								  <span class="input-group-addon" id="basic-addon2">.cpp</span>
+								</div>
+							</td>
+						</tr>
+					</table>
+					<div style="text-align:right;">
+						<button type="button" class="btn btn-default" id="btnHideCreateApp">Cancel</button>
+						<button type="submit" value="Submit" class="btn btn-default" id="btnCreateApp">Create App</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

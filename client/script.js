@@ -195,10 +195,10 @@ function templateSelectorClick(event) {
 	$('#btnTemplateText').text($(event.target).text());
 }
 
-function createApp() {
+function createApp(event) {
 	var name = $('#inputAppName').val();
 	var shortName = $('#inputShortName').val();
-	$('#createAppForm').slideUp();
+	$('#createAppPanel').effect("slide", {direction: "up", mode: "hide", distance: 520});
 	
 	$.ajax("create", {
 		method: "POST",
@@ -214,10 +214,12 @@ function createApp() {
 			updateApps(shortName);
 		},
 		error: function(data) {
-			$('#createAppForm').slideDown();
+			$('#createAppPanel').effect("slide", {direction: "up", mode: "show", distance: 520});
 			setStatus(data.responseText, true);
 		}
 	});
+	
+	event.preventDefault();
 }
 
 function deleteApp() {
@@ -266,9 +268,16 @@ $('#btnFadeout').click(function() {
 $('#btnCompiler').click(function() {showCompiler($(document.body).hasClass("nocompiler"));});
 $('#btnHideCompiler').click(function() {showCompiler(false);});
 
-$('#btnShowCreateApp').click(function() { $('#createAppForm').effect("slide", {direction: "up", mode: "show", distance: 520}); });
-$('#btnHideCreateApp').click(function() { $('#createAppForm').effect("slide", {direction: "up", mode: "hide", distance: 520}); });
-$('#btnCreateApp').click(createApp);
+$('#btnShowCreateApp').click(function() { 
+	$('#createAppPanel').effect("slide", {direction: "up", mode: "show", distance: 520});
+	$('#inputAppName').focus();
+});
+$('#inputAppName').on("input", function() {
+	$('#inputShortName').val($('#inputAppName').val().replace(/[^a-zA-Z0-9]/g, ""));
+});
+
+$('#btnHideCreateApp').click(function() { $('#createAppPanel').effect("slide", {direction: "up", mode: "hide", distance: 520}); });
+$('#createAppForm').submit(createApp);
 $('#btnDeleteApp').click(deleteApp);
 
 codeEditor.setSize("100%", "100%");
