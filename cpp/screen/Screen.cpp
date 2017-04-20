@@ -15,13 +15,13 @@ private:
 	ws2811_t ledString;
 	
 	void initializeLEDString() {
-		ledString = {
+		ledString = (ws2811_t) {
 			nullptr,
 			nullptr,
 			TARGET_FREQ,
 			DMA, {
-				{ GPIO_PIN, 0, Frame::WIDTH * Frame::HEIGHT, 255 },
-				{ 0 }
+				{ GPIO_PIN, 0, Frame::WIDTH * Frame::HEIGHT, WS2811_STRIP_RGB, nullptr, 255 },
+				{ 0, 0, 0, 0, nullptr, 0 }
 			}
 		};
 		ws2811_init(&ledString);
