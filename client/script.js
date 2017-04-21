@@ -233,6 +233,9 @@ function deleteApp() {
 			selectedApp.domElement.parentNode.removeChild(selectedApp.domElement);
 			delete apps[selectedApp.shortname];
 			selectedApp = null;
+			if (Object.keys(apps).length != 0) {
+				selectApp(apps[Object.keys(apps)[0]]);
+			}
 		},
 		error: function() {
 			setStatus("Failed to delete " + selectedApp.shortname + ".", true);			
