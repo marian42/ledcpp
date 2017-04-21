@@ -17,7 +17,7 @@ but attribution is appreciated.
 ===============================================================================
 */
 
-#include "Simplex.hpp"
+#include "Simplex.h"
 #include <cmath>
 
 // Private static member definitions

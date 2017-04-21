@@ -1,16 +1,4 @@
-#include "../../app/ShaderApp.cpp"
-#include <iostream>
-#include "../../helpers.cpp"
-#include "<AppName>.cpp"
-#include <unistd.h>
-#include <thread>
-#include <chrono>
-#include <math.h>
-
-using namespace std;
-
-<AppName>* app = 0;
-thread* appThread = 0;
+#include "appInterface.h"
 
 void runAppTask() {
 	try {
@@ -19,7 +7,7 @@ void runAppTask() {
 	catch(InterruptException exception) { }
 }
 
-extern "C" void start() {
+void start() {
 	if (app != 0) {
 		return;
 	}
@@ -28,7 +16,7 @@ extern "C" void start() {
 	appThread = new thread(runAppTask);
 }
 
-extern "C" void stop() {
+void stop() {
 	if (app == 0) {
 		return;
 	}
@@ -41,20 +29,20 @@ extern "C" void stop() {
 	}
 }
 
-extern "C" void deleteApp() {
+void deleteApp() {
 	if (app != 0) {		
 		delete app;
 	}
 }
 
-extern "C" int getFPS() {
+int getFPS() {
 	if (app == 0) {
 		return 0;
 	}
 	return app->getFPS();
 }
 
-extern "C" char* getFrame() {
+char* getFrame() {
 	return app->getFrame().getPixelArray();
 }
 
@@ -98,7 +86,7 @@ void crtAnimation() {
 	}
 }
 
-extern "C" void fadeout() {
+void fadeout() {
 	stop();
 	
 	if (app == 0) {

@@ -8,8 +8,7 @@ import time
 from shutil import copyfile, rmtree
 
 USERAPPS_DIRECTORY = "cpp/userapps/"
-APP_INTERFACE_FILENAME = "appInterface.cpp"
-APP_INTERFACE_DIRECTORY = "cpp/template/"
+TEMPLATE_DIRECTORY = "cpp/template/"
 
 dll_counter = 0
 
@@ -25,14 +24,25 @@ class UserApp:
 	def get_config_filename(self):
 		return self.get_directory() + "config.ini"
 	
-	def initialize(self):
+	def initialize(self, selected_template):
 		if not os.path.exists(self.get_directory()):
 			os.makedirs(self.get_directory())
-		mainFile = SourceFile(self.get_directory(), self.shortname + ".cpp")
-		mainFile.save()
+		
+		template_name = "App"
+		if selected_template == 1:
+			template_name = "LoopApp"
+		if selected_template == 2:
+			template_name = "ShaderApp"
+		self.create_from_template(template_name + ".h", self.shortname + ".h")
+		self.create_from_template(template_name + ".cpp", self.shortname + ".cpp")
+		self.create_from_template("CMakeLists.txt")
 		self.create_app_interface()
+		
+		mainFile = SourceFile(self.get_directory(), self.shortname + ".cpp")
 		self.files = [mainFile]
 		self.save()
+		
+		subprocess.call(['cmake', '-G', 'Unix Makefiles'], cwd = self.get_directory())
 	
 	def save(self):
 		config = configparser.ConfigParser()
@@ -60,19 +70,25 @@ class UserApp:
 		files = [file for file in os.listdir(self.get_directory()) if os.path.isfile(os.path.join(self.get_directory(), file))]
 		
 		for file in files:
-			if file.endswith(".cpp") and file != APP_INTERFACE_FILENAME:
+			if file.endswith(".cpp") and file != "appInterface.cpp":
 				sourceFile = SourceFile(self.get_directory(), file)
 				sourceFile.load()
 				self.files.append(sourceFile)
 				
-	def create_app_interface(self):
-		cpp_template = ""
-		with open(APP_INTERFACE_DIRECTORY + APP_INTERFACE_FILENAME, 'r') as file:
-			cpp_template = file.read()
-		cpp_template = cpp_template.replace("<AppName>", self.shortname)
-		text_file = open(self.get_directory() + APP_INTERFACE_FILENAME, "w")
-		text_file.write(cpp_template)
+	def create_from_template(self, template_name, target_name = ""):
+		if target_name == "":
+			target_name = template_name;
+		template_lines = ""
+		with open(TEMPLATE_DIRECTORY + template_name, 'r') as file:
+			template_lines = file.read()
+		template_lines = template_lines.replace("<AppName>", self.shortname)
+		text_file = open(self.get_directory() + target_name, "w")
+		text_file.write(template_lines)
 		text_file.close()
+		
+	def create_app_interface(self):
+		self.create_from_template("appInterface.cpp")
+		self.create_from_template("appInterface.h")
 	
 	def get_file(self, filename):
 		for sourcefile in self.files:
@@ -83,31 +99,17 @@ class UserApp:
 		return self.get_file(self.shortname + ".cpp")
 				
 	def compile(self):
-		compile_start = time.time()
-		self.create_app_interface()
-		command = [
-			"gcc",
-			"-fPIC",
-			self.get_directory() + APP_INTERFACE_FILENAME,
-			"-J4",
-			"-std=c++11",
-			"-lstdc++",
-			"-shared",
-			"-L", "cpp/screen/rpi_ws281x/",
-			"-lws2811",
-			"-lm",
-			"-o", self.get_directory() + "appInterface.so"]
-		print " ".join(command)
+		compile_start = time.time()				
 		shell = subprocess.Popen(
-			command,
+			["make"],
 			stderr = subprocess.PIPE,
-			stdout = subprocess.PIPE)
+			stdout = subprocess.PIPE,
+			cwd = self.get_directory())
 		comm = shell.communicate()
-		
+		print "Compiled in " + str(time.time() - compile_start) + "."
 		self.compiled_successfully = shell.returncode == 0
 		if (self.compiled_successfully):
 			self.save()
-		print "Compiled in " + str(time.time() - compile_start) + "."
 		
 		return comm[1] if len(comm[1]) != 0 else comm[0]
 				
@@ -118,7 +120,7 @@ class UserApp:
 		if not os.path.exists(self.get_directory() + "bin/"):
 			os.makedirs(self.get_directory() + "bin/")
 		
-		copyfile(self.get_directory() + "appInterface.so", filename)
+		copyfile(self.get_directory() + "bin/" + self.shortname + ".so", filename)
 		dll_counter += 1
 		
 		result = ctypes.CDLL(filename)

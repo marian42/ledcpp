@@ -1,6 +1,6 @@
-#include "Simplex.cpp"
-
-extern const float pi = 3.14149;
+#include "helpers.h"
+#include <cmath>
+#include <algorithm>
 
 float getRadius(int x, int y) {
 	return sqrt(pow((x - 7.5) / 8, 2) + pow((y - 7.5) / 8, 2));
@@ -36,14 +36,13 @@ float noise(float x, float y) {
 	static bool initialized = false;
 	if (!initialized) {
 		initialized = true;
-		std::cout << "init" << std::endl;
 		Simplex::init();
 	}
 	return Simplex::noise(x, y);
 }
 
 int getRing(int x, int y) {
-	return 7 - (x + y > 15 ? min(15 - x, 15 - y) : min(x, y));
+	return 7 - (x + y > 15 ? std::min(15 - x, 15 - y) : std::min(x, y));
 }
 
 int getRingPosition(int x, int y) {

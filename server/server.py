@@ -12,8 +12,8 @@ import string
 
 app_list = apps.load_apps()
 server = Flask(__name__, static_folder='../client/', static_url_path='')
-#log = logging.getLogger('werkzeug')
-#log.setLevel(logging.ERROR)
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 @server.route("/")
 def index():
@@ -124,13 +124,9 @@ def create_app():
 	
 	new_app = UserApp(short_name)
 	new_app.name = name
-	new_app.initialize()
+	new_app.initialize(selected_template)
 	app_list[short_name] = new_app
-	
-	file = new_app.get_main_file()
-	file.load_template(selected_template, short_name)
-	file.save()
-	
+		
 	return "ok"
 	
 @server.route("/delete/<app_name>", methods=['POST'])

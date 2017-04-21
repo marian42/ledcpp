@@ -1,16 +1,9 @@
-#include "App.cpp"
+#include "LoopApp.h"
 
-class LoopApp : public App {
-protected:
-	virtual void setup() {}
-	
-	virtual void loop() = 0;
-public:
-	void run() {
-		this->setup();
-		while (true) {
-			this->loop();
-			this->update();
-		}
+void LoopApp::run() {
+	this->setup();
+	while (true) {
+		this->loop();
+		this->update();
 	}
-};
+}
