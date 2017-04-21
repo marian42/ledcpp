@@ -3,7 +3,7 @@
 
 #include "Simplex.h"
 
-const float pi = 3.14149;
+const float pi = 3.14159;
 
 float getRadius(int x, int y);
 	
