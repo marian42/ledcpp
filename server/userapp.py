@@ -41,8 +41,6 @@ class UserApp:
 		mainFile = SourceFile(self.get_directory(), self.shortname + ".cpp")
 		self.files = [mainFile]
 		self.save()
-		
-		subprocess.call(['cmake', '-G', 'Unix Makefiles'], cwd = self.get_directory())
 	
 	def save(self):
 		config = configparser.ConfigParser()
@@ -99,19 +97,26 @@ class UserApp:
 		return self.get_file(self.shortname + ".cpp")
 				
 	def compile(self):
-		compile_start = time.time()				
+		compile_start = time.time()
+		
+		if not os.path.isfile(self.get_directory() + "Makefile"):
+			print "Running cmake..."
+			subprocess.call(['cmake', '-G', 'Unix Makefiles'], cwd = self.get_directory())
+		
 		shell = subprocess.Popen(
 			["make"],
 			stderr = subprocess.PIPE,
 			stdout = subprocess.PIPE,
 			cwd = self.get_directory())
 		comm = shell.communicate()
-		print "Compiled in " + str(time.time() - compile_start) + "."
+		print "Compiled in {:.2f}s.".format(time.time() - compile_start)
 		self.compiled_successfully = shell.returncode == 0
 		if (self.compiled_successfully):
 			self.save()
+		compile_output = comm[1] if len(comm[1]) != 0 else comm[0]
+		print compile_output
 		
-		return comm[1] if len(comm[1]) != 0 else comm[0]
+		return compile_output
 				
 	def load_app_interface(self):
 		global dll_counter
