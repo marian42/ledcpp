@@ -6,7 +6,7 @@ float getRadius(int x, int y) {
 	return sqrt(pow((x - 7.5) / 8, 2) + pow((y - 7.5) / 8, 2));
 }
 	
-static float getAngle(int x, int y) {
+float getAngle(int x, int y) {
 	return atan2(x - 7.5, y - 7.5) + pi;
 }
 

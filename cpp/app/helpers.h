@@ -7,7 +7,7 @@ const float pi = 3.14159;
 
 float getRadius(int x, int y);
 	
-static float getAngle(int x, int y);
+float getAngle(int x, int y);
 
 float clamp(float value, float min, float max);
 
