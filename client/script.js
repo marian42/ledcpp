@@ -37,7 +37,7 @@ function selectApp(app) {
 	}
 	
 	if (app.files[0].doc == null) {
-		app.files[0].doc = CodeMirror.Doc(app.files[0].content, "text/x-c++src", 1);
+		app.files[0].doc = CodeMirror.Doc(app.files[0].content, "text/x-c++src", 0);
 	}
 	
 	codeEditor.swapDoc(app.files[0].doc);
