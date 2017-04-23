@@ -93,6 +93,9 @@ function updateApps(appToSelect) {
 			
 			if (selectedApp == null && Object.keys(apps).length != 0) {
 				selectApp(apps[Object.keys(apps)[0]]);
+			}			
+			if (Object.keys(apps).length == 0) {
+				showCreateAppForm();
 			}
 		}
 	});
@@ -149,6 +152,9 @@ function handleButtonIntent(intent) {
 }
 
 function saveFile(intent) {
+	if (selectedApp == null) {
+		return;
+	}
 	if (!selectedApp.modified && intent != "update") {
 		handleButtonIntent(intent);
 		return;
@@ -235,6 +241,9 @@ function deleteApp() {
 			selectedApp = null;
 			if (Object.keys(apps).length != 0) {
 				selectApp(apps[Object.keys(apps)[0]]);
+			} else {
+				codeEditor.getDoc().setValue("");
+				showCreateAppForm();
 			}
 		},
 		error: function() {
@@ -259,6 +268,11 @@ function updateStatus() {
 	});
 }
 
+function showCreateAppForm() {
+	$('#createAppPanel').effect("slide", {direction: "up", mode: "show", distance: 520});
+	$('#inputAppName').focus();
+}
+
 $('#btnUpload').click(function() {saveFile("update");});
 $('#btnCompile').click(function() {saveFile("compile");});
 $('#btnRun').click(function() {saveFile("run");});
@@ -271,10 +285,7 @@ $('#btnFadeout').click(function() {
 $('#btnCompiler').click(function() {showCompiler($(document.body).hasClass("nocompiler"));});
 $('#btnHideCompiler').click(function() {showCompiler(false);});
 
-$('#btnShowCreateApp').click(function() { 
-	$('#createAppPanel').effect("slide", {direction: "up", mode: "show", distance: 520});
-	$('#inputAppName').focus();
-});
+$('#btnShowCreateApp').click(showCreateAppForm);
 $('#inputAppName').on("input", function() {
 	$('#inputShortName').val($('#inputAppName').val().replace(/[^a-zA-Z0-9]/g, ""));
 });
