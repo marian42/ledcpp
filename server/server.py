@@ -135,6 +135,22 @@ def delete_app(app_name):
 	del app_list[selectedApp.shortname]	
 	return "ok"
 	
+@server.route("/recordgif/<app_name>", methods=['POST'])
+def record_gif(app_name):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
+	apprunner.record_gif(selectedApp)
+	return "ok"
+	
+@server.route("/<app_name>.gif", methods=['GET'])
+def get_gif(app_name):
+	if not app_name in app_list.keys():
+		return "App not found", 404
+	selectedApp = app_list[app_name]
+	if not os.path.isfile(selectedApp.get_directory() + selectedApp.shortname + ".gif"):
+		return "Please wait while the gif is being recorded...", 404
+	return send_from_directory(os.getcwd(), selectedApp.get_directory() + selectedApp.shortname + ".gif")
 	
 thread.start_new_thread(server.run, (), {'host': '0.0.0.0', 'port': 80, 'threaded': True})
 while True:

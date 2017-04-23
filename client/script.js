@@ -273,6 +273,19 @@ function showCreateAppForm() {
 	$('#inputAppName').focus();
 }
 
+function recordGif() {
+	var gifTab = window.open(selectedApp.shortname + ".gif");
+	gifTab.blur();
+	window.focus();
+	$.ajax("recordgif/" + selectedApp.shortname, {
+		method: "POST",
+		success: function(data) {			
+			gifTab.location.reload();
+			gifTab.focus();
+		}
+	});
+}
+
 $('#btnUpload').click(function() {saveFile("update");});
 $('#btnCompile').click(function() {saveFile("compile");});
 $('#btnRun').click(function() {saveFile("run");});
@@ -292,6 +305,7 @@ $('#inputAppName').on("input", function() {
 
 $('#btnHideCreateApp').click(function() { $('#createAppPanel').effect("slide", {direction: "up", mode: "hide", distance: 520}); });
 $('#createAppForm').submit(createApp);
+$('#btnRecordGif').click(recordGif);
 $('#btnDeleteApp').click(deleteApp);
 
 codeEditor.setSize("100%", "100%");

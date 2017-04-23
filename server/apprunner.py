@@ -2,6 +2,7 @@ from PIL import Image
 import os
 import time
 import StringIO
+import subprocess
 
 state = "Ready"
 compile_output = ""
@@ -93,5 +94,37 @@ def get_status():
 	result["app"] = None if current_app == None else current_app.shortname
 	result["fps"] = None if not running else interface.getFPS()
 	return result
+
+def tobytes(self):
+	return self.tostring()
+
+def record_gif(userapp, duration = 4, fps = 30, pixel_size = 8):
+	dir = userapp.get_directory() + "capture/"
+	if not os.path.exists(dir):
+		os.makedirs(dir)
+
+	update_state("Recording GIF...")
+	frame_count = duration * fps
+	run(userapp)
+	next_frame = time.clock()
+	for i in range(frame_count):
+		update_state("Recording GIF ({:.1f}%)".format(100.0 * i / frame_count))
+		save_image(dir + str(i).zfill(4) + ".png")
+		next_frame += 1.0 / fps
+		time.sleep(max(0, next_frame - time.clock()))
+	update_state("Rendering GIF...")
+	subprocess.call(['convert',
+		'-layers', 'OptimizePlus',
+		'-delay', '1x' + str(fps),
+		dir + '*.png',
+		'-loop', '0',
+		'+dither',
+		'-colors', '256',
+		'-depth', '8',
+		'-interpolate', 'Nearest',
+		'-filter', 'point',
+		'-resize', str(pixel_size * 100) +'%',
+		userapp.get_directory() + userapp.shortname + '.gif'])	
+	reset_state()
 	
 reset_state()
