@@ -16,7 +16,11 @@ public:
 	
 	void set(unsigned char r, unsigned char g, unsigned char b);
 	
+	void rgb(unsigned char r, unsigned char g, unsigned char b);
+	
 	void set(unsigned char brightness);
+	
+	void gray(unsigned char brightness);
 	
 	void set(Color& color);
 	

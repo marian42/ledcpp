@@ -13,17 +13,25 @@ Color::Color(unsigned char brightness) {
 }
 
 void Color::set(unsigned char r, unsigned char g, unsigned char b) {
+	this->rgb(r,g,b);
+}
+
+void Color::rgb(unsigned char r, unsigned char g, unsigned char b) {
 	this->r = r;
 	this->g = g;
 	this->b = b;
 }
 
 void Color::set(unsigned char brightness) {
-	this->set(brightness, brightness, brightness);
+	this->rgb(brightness, brightness, brightness);
+}
+
+void Color::gray(unsigned char brightness) {
+	this->rgb(brightness, brightness, brightness);
 }
 
 void Color::set(Color& color) {
-	this->set(color.r, color.g, color.b);
+	this->rgb(color.r, color.g, color.b);
 }
 
 unsigned int Color::toInt() {
