@@ -17,6 +17,14 @@ body, html, .container-fluid, .sidebar, .body {
     position: relative;
 }
 
+::-webkit-scrollbar {
+    background: #191919;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #32332D;
+}
+
 .main-content {
     background-color:#151515;
     height: calc(100% - 52px);
