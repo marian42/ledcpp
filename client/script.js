@@ -36,11 +36,11 @@ function selectApp(app) {
 		$(selectedApp.domElement).removeClass("selected");
 	}
 	
-	if (app.files[0].doc == null) {
-		app.files[0].doc = CodeMirror.Doc(app.files[0].content, "text/x-c++src", 0);
+	if (app.source.doc == null) {
+		app.source.doc = CodeMirror.Doc(app.source.content, "text/x-c++src", 0);
 	}
 	
-	codeEditor.swapDoc(app.files[0].doc);
+	codeEditor.swapDoc(app.source.doc);
 	
 	$(app.domElement).addClass("selected");
 	selectedApp = app;
@@ -156,7 +156,7 @@ function saveFile(intent) {
 	
 	$('#btnUpload span').css("color", "#FFD800");
 	setStatus("Uploading " + selectedApp.shortname + ".cpp...", true);
-	$.ajax("save/" + selectedApp.shortname + "/" + selectedApp.files[0].filename, {
+	$.ajax("save/" + selectedApp.shortname, {
 		method: "POST",
 		processData: false,
 		data: codeEditor.getValue(),

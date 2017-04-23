@@ -23,14 +23,12 @@ def index():
 def get_apps():
 	return Response(json.dumps([app.get_serializable() for app in app_list.values()]), mimetype='application/json')
 
-@server.route("/save/<app_name>/<filename>", methods=['POST'])
-def update(app_name, filename):
+@server.route("/save/<app_name>", methods=['POST'])
+def update(app_name):
 	if not app_name in app_list.keys():
 		return "App not found", 404
 	selectedApp = app_list[app_name]
-	file = selectedApp.get_file(filename)
-	if file == None:
-		return "File not found", 404
+	file = selectedApp.source_file
 	file.content = request.data
 	file.save()
 	selectedApp.compiled_successfully = False
@@ -94,9 +92,7 @@ def get_image(app_name):
 	if os.path.isfile(filename):
 		return send_from_directory(os.getcwd(), filename)
 	else:
-		print "not found"
 		return server.send_static_file('default.png')
-
 
 @server.route("/stream", methods=['GET'])
 def stream():

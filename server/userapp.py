@@ -15,7 +15,7 @@ dll_counter = 0
 class UserApp:
 	def __init__(self, shortname):
 		self.shortname = shortname
-		self.files = []
+		self.source_file = None
 		self.compiled_successfully = False
 	
 	def get_directory(self):
@@ -38,8 +38,7 @@ class UserApp:
 		self.create_from_template("CMakeLists.txt")
 		self.create_app_interface()
 		
-		mainFile = SourceFile(self.get_directory(), self.shortname + ".cpp")
-		self.files = [mainFile]
+		self.source_file = SourceFile(self.get_directory(), self.shortname + ".cpp")
 		self.save()
 	
 	def save(self):
@@ -65,13 +64,7 @@ class UserApp:
 		self.name = config["App"]["name"]
 		self.compiled_successfully = config["App"]["compiled_successfully"] == "true"
 		
-		files = [file for file in os.listdir(self.get_directory()) if os.path.isfile(os.path.join(self.get_directory(), file))]
-		
-		for file in files:
-			if file.endswith(".cpp") and file != "appInterface.cpp":
-				sourceFile = SourceFile(self.get_directory(), file)
-				sourceFile.load()
-				self.files.append(sourceFile)
+		self.source_file = SourceFile(self.get_directory(), self.shortname + ".cpp")
 				
 	def create_from_template(self, template_name, target_name = ""):
 		if target_name == "":
@@ -88,14 +81,6 @@ class UserApp:
 		self.create_from_template("appInterface.cpp")
 		self.create_from_template("appInterface.h")
 	
-	def get_file(self, filename):
-		for sourcefile in self.files:
-			if sourcefile.filename == filename:
-				return sourcefile
-	
-	def get_main_file(self):
-		return self.get_file(self.shortname + ".cpp")
-				
 	def compile(self):
 		compile_start = time.time()
 		
@@ -137,7 +122,7 @@ class UserApp:
 		return {
 			"name": self.name,
 			"shortname": self.shortname,
-			"files": [file.get_serializable() for file in self.files]
+			"source": self.source_file.get_serializable()
 		}
 		
 	def get_image_filename(self):
