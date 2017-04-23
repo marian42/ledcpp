@@ -1,7 +1,5 @@
 #include "<AppName>.h"
-#include <unistd.h>
 #include <thread>
-#include <chrono>
 
 <AppName>* app = 0;
 thread* appThread = 0;
