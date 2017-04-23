@@ -11,6 +11,8 @@ USERAPPS_DIRECTORY = "cpp/userapps/"
 TEMPLATE_DIRECTORY = "cpp/template/"
 
 dll_counter = 0
+if not os.path.exists(USERAPPS_DIRECTORY):
+    os.makedirs(USERAPPS_DIRECTORY)
 
 class UserApp:
 	def __init__(self, shortname):
@@ -26,7 +28,7 @@ class UserApp:
 	
 	def initialize(self, selected_template):
 		os.makedirs(self.get_directory() + "bin/")
-			
+		
 		template_name = "App"
 		if selected_template == 1:
 			template_name = "LoopApp"
@@ -102,9 +104,6 @@ class UserApp:
 	def load_app_interface(self):
 		global dll_counter
 		filename = self.get_directory() + "bin/" + str(dll_counter) + ".so"
-		
-		if not os.path.exists(self.get_directory() + "bin/"):
-			os.makedirs(self.get_directory() + "bin/")
 		
 		copyfile(self.get_directory() + "bin/" + self.shortname + ".so", filename)
 		dll_counter += 1
