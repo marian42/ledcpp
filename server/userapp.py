@@ -25,9 +25,8 @@ class UserApp:
 		return self.get_directory() + "config.ini"
 	
 	def initialize(self, selected_template):
-		if not os.path.exists(self.get_directory()):
-			os.makedirs(self.get_directory())
-		
+		os.makedirs(self.get_directory() + "bin/")
+			
 		template_name = "App"
 		if selected_template == 1:
 			template_name = "LoopApp"
@@ -35,7 +34,7 @@ class UserApp:
 			template_name = "ShaderApp"
 		self.create_from_template(template_name + ".h", self.shortname + ".h")
 		self.create_from_template(template_name + ".cpp", self.shortname + ".cpp")
-		self.create_from_template("CMakeLists.txt")
+		self.create_from_template("makefile")
 		self.create_app_interface()
 		
 		self.source_file = SourceFile(self.get_directory(), self.shortname + ".cpp")
@@ -65,6 +64,7 @@ class UserApp:
 		self.compiled_successfully = config["App"]["compiled_successfully"] == "true"
 		
 		self.source_file = SourceFile(self.get_directory(), self.shortname + ".cpp")
+		self.create_from_template("makefile")		
 				
 	def create_from_template(self, template_name, target_name = ""):
 		if target_name == "":
@@ -83,10 +83,6 @@ class UserApp:
 	
 	def compile(self):
 		compile_start = time.time()
-		
-		if not os.path.isfile(self.get_directory() + "Makefile"):
-			print "Running cmake..."
-			subprocess.call(['cmake', '-G', 'Unix Makefiles'], cwd = self.get_directory())
 		
 		shell = subprocess.Popen(
 			["make"],
