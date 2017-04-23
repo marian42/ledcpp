@@ -33,6 +33,43 @@ From within the project root directory, run `sudo python server/server.py`
 
 Use a webbrowser to go to the IP address of your Raspberry Pi and you should see the web interface.
 
+# Writing apps
+There are three templates of apps you can choose from:
+1. `ShaderApp` Inspired by fragment shaders, you implement a function that computes a color given the screen position.
+It is called for every pixel, every frame.
+2. `LoopApp` You implement a method that is called once per frame and draws something on the screen.
+3. `App` You have control over timing and you write the draw loop yourself.
+
+## Color
+The color class is mutable. Its values can be changed like this:
+
+```
+color.r = 128;                // 0 .. 255
+color.rgb(255, 255, 0);       // 0 .. 255
+color.hsv(10, 255, 255);      // all values 0 .. 255
+color.gray(255);              // grayscale
+color.hue(0);                 // fully saturated colors
+color.blend(c1, c2, progress);// progress 0 .. 1
+color.set(color)              // copy existing color
+```
+
+## Math and convenience methods
+These common methods are available:
+```
+min, max, map, fract, clamp, modulo
+```
+
+And some more specialized ones:
+```
+float getRadius(int x, int y);        // distance from (8,8)
+float getAngle(int x, int y);         // angle around the center, in radians
+float map(float value, float oldLow, float oldHigh, float newLow, float newHigh);
+float noise(float x, float y);        // Simplex noise
+int getRing(int x, int y);            // distance from (8,8) counting concentric square rings
+int getRingPosition(int x, int y);    // position of the pixel within its ring
+```
+In addition, you can use everything from `cmath`, write your own functions or include other libraries.
+
 # Known issues
 
 The user written C++ code is run directly within the python server.
