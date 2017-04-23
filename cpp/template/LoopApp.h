@@ -1,7 +1,6 @@
 #include "../../app/ShaderApp.h"
 #include "../../app/helpers.h"
-#include <math.h>
-#include <algorithm>
+#include <cmath>
 
 using namespace std;
 

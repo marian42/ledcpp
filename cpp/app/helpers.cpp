@@ -1,6 +1,5 @@
 #include "helpers.h"
 #include <cmath>
-#include <algorithm>
 
 float getRadius(int x, int y) {
 	return sqrt(pow((x - 7.5) / 8, 2) + pow((y - 7.5) / 8, 2));
@@ -42,7 +41,7 @@ float noise(float x, float y) {
 }
 
 int getRing(int x, int y) {
-	return 7 - (x + y > 15 ? std::min(15 - x, 15 - y) : std::min(x, y));
+	return 7 - (x + y > 15 ? min(15 - x, 15 - y) : min(x, y));
 }
 
 int getRingPosition(int x, int y) {
@@ -60,4 +59,20 @@ int getRingPosition(int x, int y) {
 			return -2 + y - x + 2 * 2 * (ring + 1);
 		}	
 	}
+}
+
+float max(float a, float b) {
+	return a > b ? a : b;
+}
+
+float min(float a, float b) {
+	return a < b ? a : b;
+}
+
+int max(int a, int b) {
+	return a > b ? a : b;
+}
+
+int min(int a, int b) {
+	return a < b ? a : b;
 }
